@@ -11,7 +11,7 @@ import type {
 import type { ThemeType } from '../../utils/theme/withTheme';
 
 type Props = {
-  controls: Array<{
+  controls?: Array<{
     icon: 'minus' | 'plus',
     action: (property: string, value: number) => void,
   }>,
@@ -58,7 +58,7 @@ const EditSetsInputControls = (props: Props) => {
         {label}
       </Caption>
       <View style={styles.lineInput}>
-        {renderInput(controls[0], `${testID}ControlLeft`)}
+        {controls && renderInput(controls[0], `${testID}ControlLeft`)}
         <TextInput
           value={input}
           onChangeText={onChangeText}
@@ -74,7 +74,7 @@ const EditSetsInputControls = (props: Props) => {
           testID={testID}
           {...rest}
         />
-        {renderInput(controls[1], `${testID}ControlRight`)}
+        {controls && renderInput(controls[1], `${testID}ControlRight`)}
       </View>
     </View>
   );
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
   lineInput: {
     marginTop: 20,
     flexDirection: 'row',
+    height: 48,
   },
   textInput: {
     flex: 1,
