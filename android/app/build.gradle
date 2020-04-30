@@ -187,6 +187,7 @@ dependencies {
     implementation project(':react-native-localize')
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-safe-area-context')
+    implementation project(':react-native-screens')
     // Necessary to override the version of react-native-tabbed-view-pager-android
     implementation "com.android.support:design:${rootProject.ext.supportLibVersion}"
 

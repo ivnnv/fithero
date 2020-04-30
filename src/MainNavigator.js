@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { useTheme } from 'react-native-paper';
 
@@ -22,7 +22,7 @@ import EditSetsScreen from './scenes/EditSets/EditSetsScreen';
 import { dateToString, getDatePrettyFormat, getToday } from './utils/date';
 import type { ThemeType } from './utils/theme/withTheme';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
 const MainNavigator = () => {
@@ -40,10 +40,13 @@ const MainNavigator = () => {
         },
       }}
     >
-      <Stack.Navigator mode="modal" screenOptions={{ gestureEnabled: false }}>
+      <Stack.Navigator
+        mode="modal"
+        screenOptions={{ gestureEnabled: false, headerShown: false }}
+      >
         <Stack.Screen name="Main" options={{ header: () => null }}>
           {() => (
-            <Stack.Navigator>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
               <Stack.Screen name="FitHero" options={{ header: () => null }}>
                 {() => (
                   <Tab.Navigator

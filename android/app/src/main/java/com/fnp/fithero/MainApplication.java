@@ -3,6 +3,7 @@ package com.fnp.fithero;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.swmansion.rnscreens.RNScreensPackage;
 import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
 import com.github.wuxudong.rncharts.MPAndroidChartPackage;
 import is.uncommon.rn.widgets.TabbedViewPagerAndroidPackage;
@@ -63,7 +64,8 @@ public class MainApplication extends Application implements ReactApplication, Sh
           new RNSharePackage(),
           new ModuleRegistryAdapter(mModuleRegistryProvider),
           new RNSplashScreenPackage(),
-          new SafeAreaContextPackage()
+          new SafeAreaContextPackage(),
+          new RNScreensPackage()
       );
     }
 

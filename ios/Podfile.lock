@@ -246,6 +246,8 @@ PODS:
     - React
   - RNLocalize (1.0.4):
     - React
+  - RNScreens (2.7.0):
+    - React
   - RNShare (2.0.0):
     - React
   - RNVectorIcons (6.4.1):
@@ -307,6 +309,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNLocalize (from `../node_modules/react-native-localize/ios`)
+  - RNScreens (from `../node_modules/react-native-screens`)
   - RNShare (from `../node_modules/react-native-share`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - SwiftyJSON (= 5.0)
@@ -404,6 +407,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNLocalize:
     :path: "../node_modules/react-native-localize/ios"
+  RNScreens:
+    :path: "../node_modules/react-native-screens"
   RNShare:
     :path: "../node_modules/react-native-share"
   RNVectorIcons:
@@ -484,6 +489,7 @@ SPEC CHECKSUMS:
   ReactCommon: a6a294e7028ed67b926d29551aa9394fd989c24c
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNLocalize: 244646b54910e30823c0c2988de400910791847f
+  RNScreens: cf198f915f8a2bf163de94ca9f5bfc8d326c3706
   RNShare: 8b171d4b43c1d886917fdd303bf7a4b87167b05c
   RNVectorIcons: 09d03dfe7c9fc158c3dce50d891101637d428bb3
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
@@ -501,6 +507,6 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: 1e70fe58b872355f0ecb44fb81bb1a16484047f0
   Yoga: ba3d99dbee6c15ea6bbe3783d1f0cb1ffb79af0f
 
-PODFILE CHECKSUM: 7563f0aa31bc0a825b0357bb08b9ebf3ed526751
+PODFILE CHECKSUM: 52f793ca807a4707084d76d56866a6dd254a2e3b
 
 COCOAPODS: 1.9.1
