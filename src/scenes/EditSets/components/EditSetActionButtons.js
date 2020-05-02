@@ -4,8 +4,8 @@ import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, useTheme } from 'react-native-paper';
 
-import i18n from '../../utils/i18n';
-import type { ThemeType } from '../../utils/theme/withTheme';
+import i18n from '../../../utils/i18n';
+import type { ThemeType } from '../../../utils/theme/withTheme';
 
 type Props = {
   isUpdate: boolean,

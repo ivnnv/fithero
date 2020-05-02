@@ -2,9 +2,10 @@
 
 import React from 'react';
 import { Keyboard } from 'react-native';
+import { Provider } from 'react-redux';
 import { fireEvent, render } from 'react-native-testing-library';
 
-import { EditSetsWithControls } from '../EditSetsWithControls';
+import EditSetsWeightReps from '../EditSetsWeightReps';
 import { toDate } from '../../../utils/date';
 import {
   deleteSet,
@@ -12,7 +13,7 @@ import {
   getMaxSetByType,
 } from '../../../database/services/WorkoutSetService';
 import { MockRealmArray } from '../../../database/services/__tests__/helpers/databaseMocks';
-import type { WorkoutExerciseSchemaType } from '../../../database/types';
+import { createStore } from 'redux';
 
 jest.mock('react-native/Libraries/Components/Keyboard/Keyboard');
 
@@ -33,7 +34,7 @@ jest.mock('../../../hooks/useMaxSetHook');
 
 const date = toDate('2018-05-01T00:00:00.000Z');
 
-describe('EditSetsWithControls', () => {
+describe('EditSetsWeightReps', () => {
   const day = '2018-05-01T00:00:00.000Z';
   const exerciseKey = 'bench-press';
   const exercise = {
@@ -64,54 +65,57 @@ describe('EditSetsWithControls', () => {
   const defaultWeight = 20;
   const defaultReps = 8;
 
-  describe('EditSetsInputControls', () => {
-    it('has correct default values if there is no exercise', () => {
-      const { getByTestId } = render(
-        <EditSetsWithControls
+  const _render = (props, defaultUnitSystem = 'metric') =>
+    render(
+      <Provider
+        store={createStore(() => ({
+          settings: { defaultUnitSystem },
+        }))}
+      >
+        <EditSetsWeightReps
           day={day}
           exerciseKey={exerciseKey}
-          exercisesCount={1}
-          defaultUnitSystem="metric"
           exercise={null}
-          selectedPage={0}
+          selectedId=""
+          setSelectedId={jest.fn()}
+          // $FlowIgnore
+          {...props}
         />
-      );
+      </Provider>
+    );
+
+  describe('EditSetsInputControls', () => {
+    it('has correct default values if there is no exercise', async () => {
+      const { getByTestId } = _render();
 
       const weightInput = getByTestId('weightInput');
       const repsInput = getByTestId('repsInput');
       const weightLabel = getByTestId('weightInputLabel');
       const repsLabel = getByTestId('repsInputLabel');
 
-      expect(weightInput.props.input).toEqual(defaultWeight.toString());
-      expect(repsInput.props.input).toEqual(defaultReps.toString());
+      expect(weightInput.props.value).toEqual(defaultWeight.toString());
+      expect(repsInput.props.value).toEqual(defaultReps.toString());
       expect(weightLabel.props.children).toEqual('Weight (kgs)');
       expect(repsLabel.props.children).toEqual('Reps');
     });
 
     it('has the values of last set if we pass an exercise', () => {
-      const { getByTestId } = render(
-        <EditSetsWithControls
-          day={day}
-          exerciseKey={exerciseKey}
-          exercise={{
-            weight_unit: 'metric',
-            sort: 1,
-            isValid: jest.fn(),
-            ...exercise,
-          }}
-          exercisesCount={1}
-          defaultUnitSystem="metric"
-          selectedPage={0}
-        />
-      );
+      const { getByTestId } = _render({
+        exercise: {
+          weight_unit: 'metric',
+          sort: 1,
+          isValid: jest.fn(),
+          ...exercise,
+        },
+      });
 
       const weightInput = getByTestId('weightInput');
       const repsInput = getByTestId('repsInput');
 
-      expect(weightInput.props.input).toEqual(
+      expect(weightInput.props.value).toEqual(
         exercise.sets[1].weight.toString()
       );
-      expect(repsInput.props.input).toEqual(exercise.sets[1].reps.toString());
+      expect(repsInput.props.value).toEqual(exercise.sets[1].reps.toString());
     });
 
     it('has values of last set (from another day) if no exercise', () => {
@@ -126,35 +130,17 @@ describe('EditSetsWithControls', () => {
       // $FlowFixMe Flow does not now this is a mock
       getLastSetByType.mockImplementation(() => [mockLastSet]);
 
-      const { getByTestId } = render(
-        <EditSetsWithControls
-          day={day}
-          exerciseKey={exerciseKey}
-          exercisesCount={0}
-          defaultUnitSystem="metric"
-          exercise={null}
-          selectedPage={0}
-        />
-      );
+      const { getByTestId } = _render();
 
       const weightInput = getByTestId('weightInput');
       const repsInput = getByTestId('repsInput');
 
-      expect(weightInput.props.input).toEqual(mockLastSet.weight.toString());
-      expect(repsInput.props.input).toEqual(mockLastSet.reps.toString());
+      expect(weightInput.props.value).toEqual(mockLastSet.weight.toString());
+      expect(repsInput.props.value).toEqual(mockLastSet.reps.toString());
     });
 
     it('changes input(s) state using the TextInput', () => {
-      const { getByTestId } = render(
-        <EditSetsWithControls
-          day={day}
-          exerciseKey={exerciseKey}
-          exercisesCount={1}
-          defaultUnitSystem="metric"
-          exercise={null}
-          selectedPage={0}
-        />
-      );
+      const { getByTestId } = _render();
 
       const weightInput = getByTestId('weightInput');
       const repsInput = getByTestId('repsInput');
@@ -162,8 +148,8 @@ describe('EditSetsWithControls', () => {
       fireEvent.changeText(weightInput, '50');
       fireEvent.changeText(repsInput, '5');
 
-      expect(weightInput.props.input).toEqual('50');
-      expect(repsInput.props.input).toEqual('5');
+      expect(weightInput.props.value).toEqual('50');
+      expect(repsInput.props.value).toEqual('5');
     });
 
     it.skip('handles empty TextInput', () => {
@@ -174,26 +160,17 @@ describe('EditSetsWithControls', () => {
       // $FlowFixMe Flow does not now this is a mock
       getLastSetByType.mockImplementation(() => []);
 
-      const { getByTestId } = render(
-        <EditSetsWithControls
-          day={day}
-          exerciseKey={exerciseKey}
-          exercisesCount={1}
-          defaultUnitSystem="metric"
-          exercise={null}
-          selectedPage={0}
-        />
-      );
+      const { getByTestId } = _render();
 
       const repsInput = getByTestId('repsInput');
       const repsInputControlLeft = getByTestId('repsInputControlLeft');
       const repsInputControlRight = getByTestId('repsInputControlRight');
 
       fireEvent.press(repsInputControlLeft);
-      expect(repsInput.props.input).toEqual((defaultReps - 1).toString());
+      expect(repsInput.props.value).toEqual((defaultReps - 1).toString());
       fireEvent.press(repsInputControlRight);
       fireEvent.press(repsInputControlRight);
-      expect(repsInput.props.input).toEqual(
+      expect(repsInput.props.value).toEqual(
         (defaultReps - 1 + 1 + 1).toString()
       );
     });
@@ -202,75 +179,49 @@ describe('EditSetsWithControls', () => {
       // $FlowFixMe Flow does not now this is a mock
       getLastSetByType.mockImplementation(() => []);
 
-      const { getByTestId } = render(
-        <EditSetsWithControls
-          day={day}
-          exerciseKey={exerciseKey}
-          exercisesCount={1}
-          defaultUnitSystem="metric"
-          exercise={null}
-          selectedPage={0}
-        />
-      );
+      const { getByTestId } = _render();
 
       const weightInput = getByTestId('weightInput');
       const weightInputControlLeft = getByTestId('weightInputControlLeft');
       const weightInputControlRight = getByTestId('weightInputControlRight');
 
       fireEvent.press(weightInputControlLeft);
-      expect(weightInput.props.input).toEqual((defaultWeight - 1).toString());
+      expect(weightInput.props.value).toEqual((defaultWeight - 1).toString());
       fireEvent.press(weightInputControlRight);
       fireEvent.press(weightInputControlRight);
-      expect(weightInput.props.input).toEqual(
+      expect(weightInput.props.value).toEqual(
         (defaultWeight - 1 + 1 + 1).toString()
       );
     });
   });
 
   describe('EditSetActionButtons and back button', () => {
-    const _render = () =>
-      render(
-        <EditSetsWithControls
-          day={day}
-          exerciseKey={exerciseKey}
-          exercisesCount={1}
-          defaultUnitSystem="metric"
-          exercise={exercise}
-          selectedPage={0}
-        />
-      );
-
     beforeEach(() => {
       jest.clearAllMocks();
     });
 
-    it('switches between Add and Update text if a set is selected', () => {
+    it('switches between Add and Update text if a set is selected', async () => {
       const { getByTestId } = _render();
       expect(getByTestId('addSetButton').props.children).toBe('Add');
-      fireEvent.press(getByTestId('editSetItem-1'));
-      // expect(getByTestId('addSetButton').props.children).toBe('Update');
+      const { getByTestId: getByTestIdSelectedVersion } = _render({
+        selectedId: exercise.sets[0].id,
+      });
+      expect(getByTestIdSelectedVersion('addSetButton').props.children).toBe(
+        'Update'
+      );
     });
 
     it('switches Delete button to enabled/disabled depending on set selection', () => {
-      const { getByTestId } = _render();
-      const deleteSetButton = getByTestId('deleteSetButton');
-
+      const { getByTestId } = _render({ exercise });
       // Nothing selected
-      expect(deleteSetButton.props.disabled).toBe(true);
-      fireEvent.press(getByTestId('editSetItem-1'));
+      expect(getByTestId('deleteSetButton').props.disabled).toBe(true);
       // Something selected means delete button is enabled
-      expect(deleteSetButton.props.disabled).toBe(false);
-    });
-
-    it('handles back button if an option is selected', () => {
-      const { getByTestId } = _render();
-      const androidBackHandler = getByTestId('androidBackHandler');
-
-      fireEvent.press(getByTestId('editSetItem-1'));
-      expect(getByTestId('addSetButton').props.children).toBe('Update');
-
-      androidBackHandler.props.onBackPress();
-      expect(getByTestId('addSetButton').props.children).toBe('Add');
+      const { getByTestId: getByTestIdSelectedVersion } = _render({
+        selectedId: exercise.sets[0].id,
+      });
+      expect(getByTestIdSelectedVersion('deleteSetButton').props.disabled).toBe(
+        false
+      );
     });
 
     it('adds a set and dismiss the keyboard', () => {
@@ -303,23 +254,13 @@ describe('EditSetsWithControls', () => {
       () => new MockRealmArray({ ...exercise.sets[0] })
     );
 
-    const _renderComponent = (customExercise?: WorkoutExerciseSchemaType) =>
-      render(
-        <EditSetsWithControls
-          day={day}
-          exerciseKey={exerciseKey}
-          exercisesCount={1}
-          defaultUnitSystem="metric"
-          exercise={customExercise || exercise}
-          selectedPage={0}
-        />
-      );
-
     it('renders kgs or lbs', () => {
-      const { toJSON: metricJSON } = _renderComponent();
-      const { toJSON: imperialJSON } = _renderComponent({
-        ...exercise,
-        weight_unit: 'imperial',
+      const { toJSON: metricJSON } = _render({ exercise });
+      const { toJSON: imperialJSON } = _render({
+        exercise: {
+          ...exercise,
+          weight_unit: 'imperial',
+        },
       });
 
       // $FlowFixMe

@@ -3,7 +3,7 @@
 import React, { useCallback } from 'react';
 import { Platform } from 'react-native';
 import type { ViewStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
-import EditSetsInputControls from '../EditSetsInputControls';
+import EditSetsInputControls from './EditSetsInputControls';
 
 type Props = {
   label: string,
@@ -54,7 +54,7 @@ const TimeInput = ({ label, time, setTime, style }: Props) => {
   return (
     <EditSetsInputControls
       label={label}
-      input={time}
+      value={time}
       containerStyle={style}
       keyboardType="number-pad"
       onKeyPress={Platform.OS === 'ios' ? onSetTimeIOS : null}

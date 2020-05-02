@@ -124,7 +124,7 @@ export default withTheme(
     if (
       prevProps.isSelected !== nextProps.isSelected ||
       prevProps.maxSetType !== nextProps.maxSetType ||
-      prevProps.onPressItem !== nextProps.onPressItem ||
+      // prevProps.onPressItem !== nextProps.onPressItem ||
       prevProps.index !== nextProps.index ||
       prevProps.unit !== nextProps.unit ||
       prevProps.theme !== nextProps.theme

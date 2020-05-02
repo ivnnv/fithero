@@ -3,7 +3,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Card } from 'react-native-paper';
-import EditSetActionButtons from '../EditSetActionButtons';
+import EditSetActionButtons from '../components/EditSetActionButtons';
 import EditSetsTimeInput from './EditSetsTimeInput';
 
 // TODO include hook to handle back button on Android

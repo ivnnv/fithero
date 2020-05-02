@@ -8,14 +8,14 @@ import type {
   ViewStyleProp,
 } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-import type { ThemeType } from '../../utils/theme/withTheme';
+import type { ThemeType } from '../../../utils/theme/withTheme';
 
 type Props = {
   controls?: Array<{
     icon: 'minus' | 'plus',
     action: (property: string, value: number) => void,
   }>,
-  input: string,
+  value: string,
   label: string,
   onChangeText: (value: string) => void,
   containerStyle?: ViewStyleProp,
@@ -28,7 +28,7 @@ const increaseButtonSize = Platform.OS === 'ios' ? 36 : 28;
 const EditSetsInputControls = (props: Props) => {
   const {
     controls,
-    input,
+    value,
     label,
     onChangeText,
     containerStyle,
@@ -60,7 +60,7 @@ const EditSetsInputControls = (props: Props) => {
       <View style={styles.lineInput}>
         {controls && renderInput(controls[0], `${testID}ControlLeft`)}
         <TextInput
-          value={input}
+          value={value}
           onChangeText={onChangeText}
           selectionColor={theme.colors.textSelection}
           style={[

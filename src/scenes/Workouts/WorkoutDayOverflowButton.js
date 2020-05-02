@@ -3,16 +3,17 @@
 import React, { useCallback } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
 
 import type { HeaderOverflowButtonProps } from '../../components/Header/HeaderOverflowButton';
 import HeaderOverflowButton from '../../components/Header/HeaderOverflowButton';
-import { dispatch } from '../../redux/configureStore';
 import { toggleSnackbar } from '../../redux/modules/workoutDay';
 import { handleWorkoutToolbarMenu } from '../../utils/overflowActions';
 import { dateToWorkoutId } from '../../utils/date';
 
 const WorkoutDayOverflowButton = (props: HeaderOverflowButtonProps) => {
   const { navigate } = useNavigation();
+  const dispatch = useDispatch();
   const route = useRoute();
   const workoutId = dateToWorkoutId(route.params.day);
 
@@ -25,7 +26,7 @@ const WorkoutDayOverflowButton = (props: HeaderOverflowButtonProps) => {
         showSnackbar: () => dispatch(toggleSnackbar(true)),
       });
     },
-    [navigate, workoutId]
+    [dispatch, navigate, workoutId]
   );
 
   return <HeaderOverflowButton {...props} onPress={handleToolbarMenu} />;

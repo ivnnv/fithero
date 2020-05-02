@@ -18,6 +18,4 @@ const store = createStore(
   applyMiddleware(thunk)
 );
 
-export const dispatch = store.dispatch;
-
 export default store;
