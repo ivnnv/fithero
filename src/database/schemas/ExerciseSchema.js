@@ -11,6 +11,7 @@ const ExerciseSchema = {
     notes: { type: 'string', optional: true },
     primary: 'string[]',
     secondary: { type: 'string[]', optional: true },
+    category: { type: 'string', default: 'weight_reps' },
   },
 };
 

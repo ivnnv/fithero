@@ -151,6 +151,7 @@ const EditSetsWeightReps = (props: Props) => {
         date,
         type: exerciseKey,
         weight_unit: defaultUnitSystem,
+        category: 'weight_reps',
       };
       // If the user presses very fast it can try to create a duplicated primary key
       if (isAddingExercise.current) {

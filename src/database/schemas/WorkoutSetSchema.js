@@ -9,8 +9,11 @@ const WorkoutSetSchema = {
     id: 'string',
     date: 'date',
     type: 'string',
-    reps: 'int',
+    category: { type: 'string', default: 'weight_reps' },
+    reps: { type: 'int', optional: true },
     weight: { type: 'float', optional: true },
+    time: { type: 'string', optional: true },
+    distance: { type: 'float', optional: true },
   },
 };
 

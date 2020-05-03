@@ -14,6 +14,7 @@ const WorkoutExerciseSchema = {
     sets: { type: 'list', objectType: WORKOUT_SET_SCHEMA_NAME },
     sort: 'int',
     weight_unit: { type: 'string', optional: true },
+    category: { type: 'string', default: 'weight_reps' },
   },
 };
 

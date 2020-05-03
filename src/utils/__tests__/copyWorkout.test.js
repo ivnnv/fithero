@@ -29,6 +29,7 @@ describe('copyWorkout', () => {
         sort: 1,
         isValid: () => true,
         weight_unit: 'metric',
+        category: 'weight_reps',
         sets: [
           {
             id: `20180504_bench-press_001`,
@@ -46,6 +47,7 @@ describe('copyWorkout', () => {
         sort: 2,
         isValid: () => true,
         weight_unit: 'metric',
+        category: 'weight_reps',
         sets: [
           {
             id: `20180504_barbell-squat_004`,
@@ -79,6 +81,7 @@ describe('copyWorkout', () => {
         sort: 1,
         isValid: () => true,
         weight_unit: 'metric',
+        category: 'weight_reps',
         sets: [
           {
             id: `20191228_barbell-squat_003`,

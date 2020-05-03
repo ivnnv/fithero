@@ -5,11 +5,13 @@ Snapshot Diff:
 - First value
 + Second value
 
+@@ -1,17 +1,16 @@
   Object {
 -   "date": 2018-05-04T00:00:00.000Z,
 +   "date": 2019-12-28T00:00:00.000Z,
     "exercises": Array [
       Object {
+        "category": "weight_reps",
 -       "date": 2018-05-04T00:00:00.000Z,
 -       "id": "20180504_bench-press",
 -       "isValid": [Function isValid],
@@ -26,11 +28,12 @@ Snapshot Diff:
             "weight": 100,
           },
         ],
-        "sort": 1,
+@@ -19,32 +18,30 @@
         "type": "bench-press",
         "weight_unit": "metric",
       },
       Object {
+        "category": "weight_reps",
 -       "date": 2018-05-04T00:00:00.000Z,
 -       "id": "20180504_barbell-squat",
 -       "isValid": [Function isValid],
@@ -72,7 +75,7 @@ Snapshot Diff:
 - First value
 + Second value
 
-@@ -18,13 +18,44 @@
+@@ -19,13 +19,45 @@
             "id": "20191228_barbell-squat_001",
             "reps": 2,
             "type": "barbell-squat",
@@ -98,6 +101,7 @@ Snapshot Diff:
 +       "weight_unit": "metric",
 +     },
 +     Object {
++       "category": "weight_reps",
 +       "date": 2019-12-28T00:00:00.000Z,
 +       "id": "20191228_bench-press",
 +       "isValid": [Function isValid],

@@ -44,6 +44,7 @@ export const editExercise = (newExercise: ExerciseSchemaType) => {
     exercise.notes = newExercise.notes || null;
     exercise.primary = newExercise.primary;
     exercise.secondary = newExercise.secondary;
+    exercise.category = newExercise.category;
   });
 };
 

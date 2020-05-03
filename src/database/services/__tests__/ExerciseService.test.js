@@ -32,6 +32,7 @@ describe('addExercise', () => {
       name: 'TestExercise',
       notes: 'Very hard!',
       primary: ['Chest'],
+      category: 'weight_reps',
     };
 
     const generated = [...Array(102)].map((_, i) =>
@@ -56,6 +57,7 @@ describe('deleteExercise', () => {
       name: 'Some name',
       primary: ['Abs'],
       secondary: [],
+      category: 'weight_reps',
     };
 
     realm.objects = jest.fn((schemaName: string) => ({

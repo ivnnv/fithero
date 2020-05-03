@@ -16,12 +16,15 @@ export type WorkoutSchemaType = {|
   isValid: () => boolean,
 |};
 
+type ExerciseCategoryType = 'weight_reps' | 'reps' | 'time' | 'time_distance';
+
 export type AddWorkoutExerciseSchemaType = {
   id: string,
   date: Date,
   type: string,
   sets: Array<WorkoutSetSchemaType>,
   weight_unit: 'metric' | 'imperial',
+  category: ExerciseCategoryType,
 };
 
 export type WorkoutExerciseSchemaType = RealmObject &
@@ -42,6 +45,7 @@ export type AddExerciseType = {|
   notes?: ?string,
   primary: Array<string>,
   secondary?: Array<string>,
+  category: ExerciseCategoryType,
 |};
 
 export type ExerciseSchemaType = {|
@@ -50,4 +54,5 @@ export type ExerciseSchemaType = {|
   notes: ?string,
   primary: Array<string>,
   secondary: Array<string>,
+  category: ExerciseCategoryType,
 |};

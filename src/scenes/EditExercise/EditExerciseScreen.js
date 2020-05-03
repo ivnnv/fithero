@@ -16,6 +16,7 @@ import {
 import HeaderButton from '../../components/Header/HeaderButton';
 import type { NavigationType } from '../../types';
 import Screen from '../../components/Screen';
+import type { AddExerciseType } from '../../database/types';
 
 type NavigationObjectType = {
   navigation: NavigationType,
@@ -62,11 +63,12 @@ export class EditExerciseScreen extends React.Component<Props, State> {
     const primary = Object.keys(this.state.primary);
 
     if (this.state.name && primary.length > 0) {
-      const exerciseForDb = {
+      const exerciseForDb: AddExerciseType = {
         name: this.state.name,
         primary,
         notes: this.state.notes || null,
         secondary: [],
+        category: 'weight_reps',
       };
 
       const { params = {} } = this.props.route;
