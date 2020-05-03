@@ -2,14 +2,14 @@
 
 import { getLastSetByType } from '../../database/services/WorkoutSetService';
 import type {
-  WorkoutExerciseSchemaType,
-  WorkoutSetSchemaType,
+  WorkoutExerciseWeightRepsType,
+  WorkoutSetWeightRepsType,
 } from '../../database/types';
 import { getWeight, toTwoDecimals } from '../../utils/metrics';
 import type { DefaultUnitSystemType } from '../../redux/modules/settings';
 
 export const getLastSet = (
-  exercise: ?WorkoutExerciseSchemaType,
+  exercise: ?WorkoutExerciseWeightRepsType,
   exerciseKey: string
 ) => {
   if (exercise) {
@@ -25,8 +25,8 @@ export const getLastSet = (
 };
 
 export const getLastWeight = (
-  exercise: ?WorkoutExerciseSchemaType,
-  lastSet: ?WorkoutSetSchemaType,
+  exercise: ?WorkoutExerciseWeightRepsType,
+  lastSet: ?WorkoutSetWeightRepsType,
   unit: DefaultUnitSystemType
 ) => {
   const defaultWeight = unit === 'metric' ? 20 : 45;

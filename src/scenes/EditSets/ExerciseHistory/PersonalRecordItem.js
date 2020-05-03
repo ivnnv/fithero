@@ -9,13 +9,13 @@ import i18n from '../../../utils/i18n';
 import { formatDate, isSameYear, isToday } from '../../../utils/date';
 import { toLb, toTwoDecimals } from '../../../utils/metrics';
 import withTheme from '../../../utils/theme/withTheme';
-import type { WorkoutSetSchemaType } from '../../../database/types';
+import type { WorkoutSetWeightRepsType } from '../../../database/types';
 import type { ThemeType } from '../../../utils/theme/withTheme';
 import type { DefaultUnitSystemType } from '../../../redux/modules/settings';
 import Card from '../../../components/Card';
 
 type Props = {|
-  set: WorkoutSetSchemaType,
+  set: WorkoutSetWeightRepsType,
   theme: ThemeType,
   trophyColor: string,
   unit: DefaultUnitSystemType,

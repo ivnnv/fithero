@@ -1,7 +1,10 @@
 /* @flow */
 
 import realm from '../index';
-import type { AddWorkoutExerciseSchemaType } from '../types';
+import type {
+  AddWorkoutExerciseWeightRepsType,
+  WorkoutExerciseSchemaType,
+} from '../types';
 import { dateToWorkoutId, getTimeAgo } from '../../utils/date';
 import { WORKOUT_EXERCISE_SCHEMA_NAME } from '../schemas/WorkoutExerciseSchema';
 import { WORKOUT_SCHEMA_NAME } from '../schemas/WorkoutSchema';
@@ -9,7 +12,7 @@ import { WORKOUT_SCHEMA_NAME } from '../schemas/WorkoutSchema';
 export const getWorkoutExerciseById = (id: string) =>
   realm.objects(WORKOUT_EXERCISE_SCHEMA_NAME).filtered(`id = $0`, id);
 
-export const addExercise = (exercise: AddWorkoutExerciseSchemaType) => {
+export const addExercise = (exercise: AddWorkoutExerciseWeightRepsType) => {
   realm.write(() => {
     const workoutId = dateToWorkoutId(exercise.date);
     let workout = realm.objectForPrimaryKey(WORKOUT_SCHEMA_NAME, workoutId);
@@ -28,9 +31,7 @@ export const addExercise = (exercise: AddWorkoutExerciseSchemaType) => {
   });
 };
 
-export const deleteWorkoutExercise = (
-  exercise: AddWorkoutExerciseSchemaType
-) => {
+export const deleteWorkoutExercise = (exercise: WorkoutExerciseSchemaType) => {
   const workoutId = dateToWorkoutId(exercise.date);
   realm.delete(exercise);
   // Now we check if workout needs to be deleted too

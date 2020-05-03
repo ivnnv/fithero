@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Keyboard, StyleSheet, View } from 'react-native';
 
-import type { WorkoutExerciseSchemaType } from '../../../database/types';
+import type { WorkoutExerciseWeightRepsType } from '../../../database/types';
 import EditSetsInputControls from '../components/EditSetsInputControls';
 import i18n from '../../../utils/i18n';
 import EditSetActionButtons from '../components/EditSetActionButtons';
@@ -36,7 +36,7 @@ import usePrevious from '../../../hooks/usePrevious';
 type Props = {
   day: string,
   exerciseKey: string,
-  exercise: ?WorkoutExerciseSchemaType,
+  exercise: ?WorkoutExerciseWeightRepsType,
   selectedId: string,
   setSelectedId: string => void,
 };

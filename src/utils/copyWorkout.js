@@ -46,12 +46,15 @@ export const copyWorkout = (
         date,
       };
     });
-    newWorkout.exercises.push({
-      ...e,
-      id: exerciseIdDb,
-      date,
-      sets,
-    });
+    newWorkout.exercises.push(
+      // $FlowFixMe
+      {
+        ...e,
+        id: exerciseIdDb,
+        date,
+        sets,
+      }
+    );
   });
 
   realm.write(() => {
@@ -95,12 +98,15 @@ const mergeWorkout = (
             date,
           };
         });
-        existingWorkout.exercises.push({
-          ...exercise,
-          id: exerciseIdDb,
-          sets,
-          date,
-        });
+        existingWorkout.exercises.push(
+          // $FlowFixMe
+          {
+            ...exercise,
+            id: exerciseIdDb,
+            sets,
+            date,
+          }
+        );
       }
     });
     // Fix exercises sorting

@@ -6,7 +6,7 @@ import { Text } from 'react-native-paper';
 
 import { getDatePrettyFormat } from '../../../utils/date';
 import type { WorkoutExerciseSchemaType } from '../../../database/types';
-import SetItem from '../../../components/SetItem';
+import SetItem from '../../../components/WorkoutWeightRepsSetItem';
 
 type Props = {|
   exercise: WorkoutExerciseSchemaType,

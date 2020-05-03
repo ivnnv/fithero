@@ -2,7 +2,10 @@
 
 import * as RNLocalize from 'react-native-localize';
 
-import type { WorkoutExerciseSchemaType } from '../database/types';
+import type {
+  WorkoutExerciseSchemaType,
+  WorkoutExerciseWeightRepsType,
+} from '../database/types';
 import type { DefaultUnitSystemType } from '../redux/modules/settings';
 
 const oneKgToLb = 2.204622622;
@@ -13,7 +16,7 @@ export const toTwoDecimals = (value: number) => Math.round(value * 100) / 100;
 
 export const getWeight = (
   value: number,
-  exercise: ?WorkoutExerciseSchemaType,
+  exercise: ?WorkoutExerciseWeightRepsType,
   defaultUnitSystem: DefaultUnitSystemType
 ) => {
   const unit =

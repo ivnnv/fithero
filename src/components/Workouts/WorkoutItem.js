@@ -8,12 +8,12 @@ import { useSelector } from 'react-redux';
 import { getExerciseName } from '../../utils/exercises';
 import type {
   ExerciseSchemaType,
-  WorkoutExerciseSchemaType,
+  WorkoutExerciseWeightRepsType,
   WorkoutSetSchemaType,
 } from '../../database/types';
 import { extractExerciseKeyFromDatabase } from '../../database/utils';
 import type { DefaultUnitSystemType } from '../../redux/modules/settings';
-import SetItem from '../SetItem';
+import SetItem from '../WorkoutWeightRepsSetItem';
 import useRealmResultsHook from '../../hooks/useRealmResultsHook';
 import {
   getExerciseById,
@@ -29,7 +29,7 @@ import { REALM_DEFAULT_DEBOUNCE_VALUE } from '../../database/constants';
 import Card from '../Card';
 
 type Props = {|
-  exercise: WorkoutExerciseSchemaType,
+  exercise: WorkoutExerciseWeightRepsType,
   onPressItem: (exerciseKey: string, customExerciseName: ?string) => void,
 |};
 

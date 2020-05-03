@@ -16,29 +16,55 @@ export type WorkoutSchemaType = {|
   isValid: () => boolean,
 |};
 
-type ExerciseCategoryType = 'weight_reps' | 'reps' | 'time' | 'time_distance';
+export type ExerciseCategoryType =
+  | 'weight_reps'
+  | 'reps'
+  | 'time'
+  | 'time_distance';
 
-export type AddWorkoutExerciseSchemaType = {
+type AddWorkoutExerciseSchemaType = {
   id: string,
   date: Date,
   type: string,
-  sets: Array<WorkoutSetSchemaType>,
   weight_unit: 'metric' | 'imperial',
   category: ExerciseCategoryType,
+  sets: Array<WorkoutSetWeightRepsType>,
 };
 
-export type WorkoutExerciseSchemaType = RealmObject &
+export type AddWorkoutExerciseWeightRepsType = AddWorkoutExerciseSchemaType & {
+  sets: Array<WorkoutSetWeightRepsType>,
+};
+
+export type WorkoutExerciseWeightRepsType = RealmObject &
   AddWorkoutExerciseSchemaType & {
+    sets: Array<WorkoutSetWeightRepsType>,
     sort: number,
   };
 
-export type WorkoutSetSchemaType = {|
+export type WorkoutExerciseTimeType = RealmObject &
+  AddWorkoutExerciseSchemaType & {
+    sets: Array<WorkoutSetTimeType>,
+    sort: number,
+  };
+
+export type WorkoutExerciseSchemaType =
+  | WorkoutExerciseWeightRepsType
+  | WorkoutExerciseTimeType;
+
+export type WorkoutSetSchemaType = {
   id: string,
   date: Date,
   type: string,
+};
+
+export type WorkoutSetWeightRepsType = WorkoutSetSchemaType & {
   reps: number,
   weight: number,
-|};
+};
+
+export type WorkoutSetTimeType = WorkoutSetSchemaType & {
+  time: string,
+};
 
 export type AddExerciseType = {|
   name: string,

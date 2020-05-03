@@ -7,7 +7,7 @@ import { Text } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import i18n from '../../utils/i18n';
-import type { WorkoutSetSchemaType } from '../../database/types';
+import type { WorkoutSetWeightRepsType } from '../../database/types';
 import type { ThemeType } from '../../utils/theme/withTheme';
 import withTheme from '../../utils/theme/withTheme';
 import { toLb, toTwoDecimals } from '../../utils/metrics';
@@ -18,7 +18,7 @@ type Props = {|
   maxSetType: 'maxSet' | 'maxRep' | null,
   onPressItem: (setId: string) => void,
   index: number,
-  set: WorkoutSetSchemaType,
+  set: WorkoutSetWeightRepsType,
   theme: ThemeType,
   unit: DefaultUnitSystemType,
 |};

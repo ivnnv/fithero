@@ -13,8 +13,8 @@ import {
 } from '../../database/services/WorkoutService';
 import i18n from '../../utils/i18n';
 import type {
-  WorkoutSetSchemaType,
   WorkoutSchemaType,
+  WorkoutSetWeightRepsType,
 } from '../../database/types';
 import { getSetsThisWeek } from '../../database/services/WorkoutSetService';
 import type { ThemeType } from '../../utils/theme/withTheme';
@@ -64,9 +64,11 @@ const StatisticsScreen = (props: Props) => {
     query: useCallback(() => getWorkoutsThisWeek(), [firstDayOfTheWeek]),
   });
 
-  const { data: setsThisWeek } = useRealmResultsHook<WorkoutSetSchemaType>({
+  const { data: setsThisWeek } = useRealmResultsHook<WorkoutSetWeightRepsType>({
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    query: useCallback(() => getSetsThisWeek(), [firstDayOfTheWeek]),
+    query: useCallback(() => getSetsThisWeek('weight_reps'), [
+      firstDayOfTheWeek,
+    ]),
   });
 
   const weekVolume = setsThisWeek.reduce(

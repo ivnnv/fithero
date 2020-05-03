@@ -6,13 +6,13 @@ import { Text } from 'react-native-paper';
 
 import i18n from '../utils/i18n';
 import { toLb, toTwoDecimals } from '../utils/metrics';
-import type { WorkoutSetSchemaType } from '../database/types';
+import type { WorkoutSetWeightRepsType } from '../database/types';
 import type { DefaultUnitSystemType } from '../redux/modules/settings';
 import type { ThemeType } from '../utils/theme/withTheme';
 import withTheme from '../utils/theme/withTheme';
 
 type Props = {
-  set: WorkoutSetSchemaType,
+  set: WorkoutSetWeightRepsType,
   maxSetId: ?string,
   maxRepId: ?string,
   index: number,
@@ -20,7 +20,7 @@ type Props = {
   theme: ThemeType,
 };
 
-const SetItem = (props: Props) => {
+const WorkoutWeightRepsSetItem = (props: Props) => {
   const { set, maxSetId, maxRepId, index, unit } = props;
   const { colors } = props.theme;
 
@@ -69,4 +69,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withTheme(SetItem);
+export default withTheme(WorkoutWeightRepsSetItem);

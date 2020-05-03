@@ -5,6 +5,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { copyWorkout } from '../copyWorkout';
 import realm from '../../database';
 import { getWorkoutByPrimaryKey } from '../../database/services/WorkoutService';
+import type { WorkoutSetWeightRepsType } from '../../database/types';
 
 jest.mock('../date', () => {
   const actualDate = jest.requireActual('../date');
@@ -18,6 +19,32 @@ jest.mock('../../database/services/WorkoutService');
 
 describe('copyWorkout', () => {
   const date = new Date('2018-05-04T00:00:00.000Z');
+  const sets1: Array<WorkoutSetWeightRepsType> = [
+    {
+      id: `20180504_bench-press_001`,
+      reps: 5,
+      weight: 100,
+      date,
+      type: 'bench-press',
+    },
+  ];
+  const sets2: Array<WorkoutSetWeightRepsType> = [
+    {
+      id: `20180504_barbell-squat_004`,
+      reps: 5,
+      weight: 120,
+      date,
+      type: 'barbell-squat',
+    },
+    {
+      id: `20180504_barbell-squat_001`,
+      reps: 4,
+      weight: 120,
+      date,
+      type: 'barbell-squat',
+    },
+  ];
+
   const workout = {
     id: '20180504',
     date,
@@ -30,15 +57,7 @@ describe('copyWorkout', () => {
         isValid: () => true,
         weight_unit: 'metric',
         category: 'weight_reps',
-        sets: [
-          {
-            id: `20180504_bench-press_001`,
-            reps: 5,
-            weight: 100,
-            date,
-            type: 'bench-press',
-          },
-        ],
+        sets: sets1,
       },
       {
         id: `20180504_barbell-squat`,
@@ -48,22 +67,7 @@ describe('copyWorkout', () => {
         isValid: () => true,
         weight_unit: 'metric',
         category: 'weight_reps',
-        sets: [
-          {
-            id: `20180504_barbell-squat_004`,
-            reps: 5,
-            weight: 120,
-            date,
-            type: 'barbell-squat',
-          },
-          {
-            id: `20180504_barbell-squat_001`,
-            reps: 4,
-            weight: 120,
-            date,
-            type: 'barbell-squat',
-          },
-        ],
+        sets: sets2,
       },
     ],
     isValid: () => true,

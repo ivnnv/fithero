@@ -1,6 +1,10 @@
 /* @flow */
 
-import type { WorkoutSetSchemaType } from '../types';
+import type {
+  ExerciseCategoryType,
+  WorkoutSetSchemaType,
+  WorkoutSetWeightRepsType,
+} from '../types';
 import realm from '../index';
 import { getExerciseSchemaIdFromSet } from '../utils';
 import { deleteWorkoutExercise } from './WorkoutExerciseService';
@@ -31,7 +35,7 @@ export const addSet = (set: WorkoutSetSchemaType) => {
   });
 };
 
-export const updateSet = (updatedSet: WorkoutSetSchemaType) => {
+export const updateSet = (updatedSet: WorkoutSetWeightRepsType) => {
   realm.write(() => {
     const set = realm.objectForPrimaryKey(
       WORKOUT_SET_SCHEMA_NAME,
@@ -68,9 +72,14 @@ export const getLastSetByType = (type: ?string) =>
     .filtered('type = $0', type)
     .sorted([['date', true], ['id', true]]);
 
-export const getSetsThisWeek = () => {
+export const getSetsThisWeek = (category: ExerciseCategoryType) => {
   const [start, end] = getFirstAndLastWeekday(getToday());
   return realm
     .objects(WORKOUT_SET_SCHEMA_NAME)
-    .filtered(`date >= $0 AND date <= $1`, start, end);
+    .filtered(
+      `category = $0 AND date >= $1 AND date <= $2`,
+      category,
+      start,
+      end
+    );
 };
