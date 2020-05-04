@@ -124,6 +124,8 @@ export default withTheme(
     if (
       prevProps.isSelected !== nextProps.isSelected ||
       prevProps.maxSetType !== nextProps.maxSetType ||
+      // TODO comment out for now because it breaks as selectedId always changes onPressItem.
+      //  It seems to not affect the usage (as already we have isSelected prop)
       // prevProps.onPressItem !== nextProps.onPressItem ||
       prevProps.index !== nextProps.index ||
       prevProps.unit !== nextProps.unit ||

@@ -32,17 +32,18 @@ import Card from '../../../components/Card';
 import { useSelector } from 'react-redux';
 import { getLastSet, getLastWeight } from '../utils';
 import usePrevious from '../../../hooks/usePrevious';
+import useSelectedId from '../hooks/useSelectedId';
 
 type Props = {
   day: string,
   exerciseKey: string,
   exercise: ?WorkoutExerciseWeightRepsType,
-  selectedId: string,
-  setSelectedId: string => void,
+  selectedPage?: number,
 };
 
 const EditSetsWeightReps = (props: Props) => {
-  const { day, exercise, exerciseKey, selectedId, setSelectedId } = props;
+  const { day, exercise, exerciseKey, selectedPage } = props;
+  const [selectedId, setSelectedId] = useSelectedId(selectedPage);
   const defaultUnitSystem: DefaultUnitSystemType = useSelector(
     state => state.settings.defaultUnitSystem
   );

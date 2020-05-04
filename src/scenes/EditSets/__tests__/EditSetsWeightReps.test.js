@@ -76,8 +76,7 @@ describe('EditSetsWeightReps', () => {
           day={day}
           exerciseKey={exerciseKey}
           exercise={null}
-          selectedId=""
-          setSelectedId={jest.fn()}
+          selectedPage={0}
           // $FlowIgnore
           {...props}
         />
@@ -201,14 +200,10 @@ describe('EditSetsWeightReps', () => {
     });
 
     it('switches between Add and Update text if a set is selected', async () => {
-      const { getByTestId } = _render();
+      const { getByTestId } = _render({ exercise });
       expect(getByTestId('addSetButton').props.children).toBe('Add');
-      const { getByTestId: getByTestIdSelectedVersion } = _render({
-        selectedId: exercise.sets[0].id,
-      });
-      expect(getByTestIdSelectedVersion('addSetButton').props.children).toBe(
-        'Update'
-      );
+      fireEvent.press(getByTestId('editSetItem-1'));
+      expect(getByTestId('addSetButton').props.children).toBe('Update');
     });
 
     it('switches Delete button to enabled/disabled depending on set selection', () => {
@@ -216,12 +211,8 @@ describe('EditSetsWeightReps', () => {
       // Nothing selected
       expect(getByTestId('deleteSetButton').props.disabled).toBe(true);
       // Something selected means delete button is enabled
-      const { getByTestId: getByTestIdSelectedVersion } = _render({
-        selectedId: exercise.sets[0].id,
-      });
-      expect(getByTestIdSelectedVersion('deleteSetButton').props.disabled).toBe(
-        false
-      );
+      fireEvent.press(getByTestId('editSetItem-1'));
+      expect(getByTestId('deleteSetButton').props.disabled).toBe(false);
     });
 
     it('adds a set and dismiss the keyboard', () => {

@@ -11,8 +11,8 @@ const WorkoutSetSchema = {
     type: 'string',
     category: { type: 'string', default: 'weight_reps' },
     reps: { type: 'int', optional: true },
-    weight: { type: 'float', optional: true },
-    time: { type: 'string', optional: true },
+    weight: { type: 'float', optional: true }, // Saved in kg
+    time: { type: 'int', optional: true }, // Saved in seconds
     distance: { type: 'float', optional: true },
   },
 };

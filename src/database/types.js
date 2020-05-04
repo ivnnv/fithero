@@ -63,7 +63,7 @@ export type WorkoutSetWeightRepsType = WorkoutSetSchemaType & {
 };
 
 export type WorkoutSetTimeType = WorkoutSetSchemaType & {
-  time: string,
+  time: number,
 };
 
 export type AddExerciseType = {|

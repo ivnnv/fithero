@@ -4,7 +4,10 @@ import * as React from 'react';
 import { useCallback, useMemo } from 'react';
 import { VirtualizedList, View } from 'react-native';
 
-import type { WorkoutSchemaType } from '../../database/types';
+import type {
+  ExerciseCategoryType,
+  WorkoutSchemaType,
+} from '../../database/types';
 import WorkoutItem from './WorkoutItem';
 import WorkoutEmptyView from './WorkoutEmptyView';
 import { deserializeWorkoutExercise } from '../../database/utils';
@@ -12,7 +15,11 @@ import { deserializeWorkoutExercise } from '../../database/utils';
 type Props = {
   dayString: string,
   contentContainerStyle?: View.propTypes.style,
-  onPressItem: (exerciseKey: string, customExerciseName: ?string) => void,
+  onPressItem: (
+    exerciseKey: string,
+    customExerciseName: ?string,
+    exerciseCategory: ExerciseCategoryType
+  ) => void,
   workout: ?WorkoutSchemaType,
 };
 

@@ -126,6 +126,7 @@ class ExercisesScreen extends Component<Props, State> {
       day,
       exerciseKey: exercise.id,
       exerciseName: exercise.name,
+      exerciseCategory: exercise.category,
     });
   };
 

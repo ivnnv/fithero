@@ -12,6 +12,7 @@ import {
   getWorkoutExerciseById,
 } from '../../../database/services/WorkoutExerciseService';
 import type {
+  ExerciseCategoryType,
   WorkoutExerciseSchemaType,
   WorkoutSetSchemaType,
 } from '../../../database/types';
@@ -37,6 +38,7 @@ type RouteType = {
     day: string,
     exerciseKey: string,
     exerciseName?: string,
+    exerciseCategory: ExerciseCategoryType,
   },
 };
 
@@ -108,12 +110,17 @@ const ExerciseHistory = () => {
         <Card
           style={styles.card}
           onPress={() => {
-            const { exerciseKey, exerciseName } = route.params;
+            const {
+              exerciseKey,
+              exerciseName,
+              exerciseCategory,
+            } = route.params;
             navigate('EditSetsModal', {
               isModal: true,
               day: dateToString(item.date),
               exerciseName,
               exerciseKey,
+              exerciseCategory,
             });
           }}
         >

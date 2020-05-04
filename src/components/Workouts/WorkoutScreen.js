@@ -8,7 +8,10 @@ import WorkoutList from './WorkoutList';
 import FABSnackbar from '../FABSnackbar';
 import i18n from '../../utils/i18n';
 import WorkoutComments from './WorkoutComments';
-import type { WorkoutSchemaType } from '../../database/types';
+import type {
+  ExerciseCategoryType,
+  WorkoutSchemaType,
+} from '../../database/types';
 import Screen from '../Screen';
 
 type Props = {|
@@ -40,11 +43,16 @@ const WorkoutScreen = (props: Props) => {
   }, [workoutId]);
 
   const onExercisePress = useCallback(
-    (exerciseKey: string, customExerciseName: ?string) => {
+    (
+      exerciseKey: string,
+      customExerciseName: ?string,
+      exerciseCategory: ExerciseCategoryType
+    ) => {
       navigate('EditSets', {
         day: workoutId,
         exerciseKey,
         exerciseName: customExerciseName,
+        exerciseCategory,
       });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

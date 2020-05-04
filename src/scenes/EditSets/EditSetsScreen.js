@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 import { useRoute } from '@react-navigation/native';
@@ -10,15 +10,19 @@ import { getExerciseSchemaId } from '../../database/utils';
 import EditSetsWeightReps from './EditSetsWeightReps';
 import { getWorkoutExerciseById } from '../../database/services/WorkoutExerciseService';
 import useRealmResultsHook from '../../hooks/useRealmResultsHook';
-import type { WorkoutExerciseSchemaType } from '../../database/types';
+import type {
+  ExerciseCategoryType,
+  WorkoutExerciseSchemaType,
+} from '../../database/types';
 import { getExerciseName } from '../../utils/exercises';
-import useBackButton from '../../hooks/useBackButton';
+import EditSetsTime from './EditSetsTime';
 
 type RouteType = {
   params: {
     day: string,
     exerciseKey: string,
     exerciseName?: string,
+    exerciseCategory: ExerciseCategoryType,
     isModal?: boolean,
   },
 };
@@ -29,9 +33,14 @@ type Props = {
 
 const EditSetsScreen = (props: Props) => {
   const route: RouteType = useRoute();
-  const { day, exerciseKey, exerciseName, isModal } = route.params;
+  const {
+    day,
+    exerciseKey,
+    exerciseName,
+    exerciseCategory,
+    isModal,
+  } = route.params;
   const { selectedPage } = props;
-  const [selectedId, setSelectedId] = useState('');
 
   const id = getExerciseSchemaId(day, exerciseKey);
   const { data } = useRealmResultsHook<WorkoutExerciseSchemaType>({
@@ -39,11 +48,20 @@ const EditSetsScreen = (props: Props) => {
   });
   const exercise = data.length > 0 ? data[0] : null;
 
-  const onBackButton = useCallback(() => {
-    setSelectedId('');
-  }, []);
-  const shouldTriggerBackButton = !!(selectedId && selectedPage === 0);
-  useBackButton(shouldTriggerBackButton, onBackButton);
+  const renderControls = useCallback(() => {
+    if (exerciseCategory === 'time') {
+      return <EditSetsTime />;
+    }
+    return (
+      <EditSetsWeightReps
+        testID="edit-sets-with-controls"
+        day={day}
+        exerciseKey={exerciseKey}
+        exercise={exercise}
+        selectedPage={selectedPage}
+      />
+    );
+  }, [day, exercise, exerciseCategory, exerciseKey, selectedPage]);
 
   return (
     <Screen style={styles.container}>
@@ -52,14 +70,7 @@ const EditSetsScreen = (props: Props) => {
           {getExerciseName(exerciseKey, exerciseName)}
         </Text>
       )}
-      <EditSetsWeightReps
-        testID="edit-sets-with-controls"
-        day={day}
-        exerciseKey={exerciseKey}
-        exercise={exercise}
-        selectedId={selectedId}
-        setSelectedId={setSelectedId}
-      />
+      {renderControls()}
     </Screen>
   );
 };

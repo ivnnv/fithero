@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 
 import { getExerciseName } from '../../utils/exercises';
 import type {
+  ExerciseCategoryType,
   ExerciseSchemaType,
   WorkoutExerciseWeightRepsType,
   WorkoutSetSchemaType,
@@ -30,7 +31,11 @@ import Card from '../Card';
 
 type Props = {|
   exercise: WorkoutExerciseWeightRepsType,
-  onPressItem: (exerciseKey: string, customExerciseName: ?string) => void,
+  onPressItem: (
+    exerciseKey: string,
+    customExerciseName: ?string,
+    exerciseCategory: ExerciseCategoryType
+  ) => void,
 |};
 
 const WorkoutItem = (props: Props) => {
@@ -81,16 +86,16 @@ const WorkoutItem = (props: Props) => {
     [defaultUnitSystem, exercise.weight_unit, maxRepId, maxSetId]
   );
 
+  const onPress = useCallback(() => {
+    onPressItem(
+      extractExerciseKeyFromDatabase(exercise.id),
+      customExerciseName,
+      exercise.category
+    );
+  }, [customExerciseName, exercise.category, exercise.id, onPressItem]);
+
   return (
-    <Card
-      style={styles.card}
-      onPress={() => {
-        onPressItem(
-          extractExerciseKeyFromDatabase(exercise.id),
-          customExerciseName
-        );
-      }}
-    >
+    <Card style={styles.card} onPress={onPress}>
       <View>
         <Text>
           {getExerciseName(
