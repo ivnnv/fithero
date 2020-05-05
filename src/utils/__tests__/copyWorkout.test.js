@@ -108,6 +108,8 @@ describe('copyWorkout', () => {
   };
 
   it('copies a workout into an empty day', () => {
+    // TODO fix flow here (when fixing copy workout with time)
+    // $FlowFixMe
     copyWorkout(workout, '20191228');
     // $FlowFixMe
     expect(workout).toMatchDiffSnapshot(realm.create.mock.calls[0][1]);

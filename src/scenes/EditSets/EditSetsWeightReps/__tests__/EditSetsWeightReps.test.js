@@ -5,19 +5,19 @@ import { Keyboard } from 'react-native';
 import { Provider } from 'react-redux';
 import { fireEvent, render } from 'react-native-testing-library';
 
-import EditSetsWeightReps from '../EditSetsWeightReps';
-import { toDate } from '../../../utils/date';
+import EditSetsWeightReps from '../index';
+import { toDate } from '../../../../utils/date';
 import {
   deleteSet,
   getLastSetByType,
   getMaxSetByType,
-} from '../../../database/services/WorkoutSetService';
-import { MockRealmArray } from '../../../database/services/__tests__/helpers/databaseMocks';
+} from '../../../../database/services/WorkoutSetService';
+import { MockRealmArray } from '../../../../database/services/__tests__/helpers/databaseMocks';
 import { createStore } from 'redux';
 
 jest.mock('react-native/Libraries/Components/Keyboard/Keyboard');
 
-jest.mock('../../../database/services/WorkoutSetService', () => ({
+jest.mock('../../../../database/services/WorkoutSetService', () => ({
   addSet: jest.fn(),
   deleteSet: jest.fn(),
   getLastSetByType: jest.fn(() => []),
@@ -26,11 +26,11 @@ jest.mock('../../../database/services/WorkoutSetService', () => ({
   getMaxRepByType: jest.fn(),
 }));
 
-jest.mock('../../../database/services/WorkoutExerciseService');
+jest.mock('../../../../database/services/WorkoutExerciseService');
 
-jest.mock('../../../hooks/useKeyboard');
+jest.mock('../../../../hooks/useKeyboard');
 
-jest.mock('../../../hooks/useMaxSetHook');
+jest.mock('../../../../hooks/useMaxSetHook');
 
 const date = toDate('2018-05-01T00:00:00.000Z');
 

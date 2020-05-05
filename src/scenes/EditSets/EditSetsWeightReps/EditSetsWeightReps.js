@@ -8,7 +8,6 @@ import EditSetsInputControls from '../components/EditSetsInputControls';
 import i18n from '../../../utils/i18n';
 import EditSetActionButtons from '../components/EditSetActionButtons';
 import {
-  deserializeWorkoutExercise,
   extractSetIndexFromDatabase,
   getExerciseSchemaId,
   getSetSchemaId,
@@ -27,12 +26,12 @@ import {
   toTwoDecimals,
 } from '../../../utils/metrics';
 import type { DefaultUnitSystemType } from '../../../redux/modules/settings';
-import EditSetsList from '../EditSetsList';
 import Card from '../../../components/Card';
 import { useSelector } from 'react-redux';
 import { getLastSet, getLastWeight } from '../utils';
 import usePrevious from '../../../hooks/usePrevious';
 import useSelectedId from '../hooks/useSelectedId';
+import EditSetsWeightRepsList from './EditSetsWeightRepsList';
 
 type Props = {
   day: string,
@@ -259,14 +258,8 @@ const EditSetsWeightReps = (props: Props) => {
           onDeleteSet={onDeleteSet}
         />
       </Card>
-      <EditSetsList
-        exercise={
-          // It's possible that we delete the whole exercise so this access to .sets would be invalid
-          exercise && exercise.isValid()
-            ? deserializeWorkoutExercise(exercise)
-            : null
-        }
-        unit={unit}
+      <EditSetsWeightRepsList
+        exercise={exercise}
         onPressItem={onPressItem}
         selectedId={selectedId}
         type={exerciseKey}

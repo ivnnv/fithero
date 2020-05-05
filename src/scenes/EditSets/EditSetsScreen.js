@@ -1,12 +1,15 @@
 /* @flow */
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 import { useRoute } from '@react-navigation/native';
 
 import Screen from '../../components/Screen';
-import { getExerciseSchemaId } from '../../database/utils';
+import {
+  deserializeWorkoutExercise,
+  getExerciseSchemaId,
+} from '../../database/utils';
 import EditSetsWeightReps from './EditSetsWeightReps';
 import { getWorkoutExerciseById } from '../../database/services/WorkoutExerciseService';
 import useRealmResultsHook from '../../hooks/useRealmResultsHook';
@@ -43,11 +46,19 @@ const EditSetsScreen = (props: Props) => {
   const { selectedPage } = props;
 
   const id = getExerciseSchemaId(day, exerciseKey);
-  const { data } = useRealmResultsHook<WorkoutExerciseSchemaType>({
+  const { data, timestamp } = useRealmResultsHook<WorkoutExerciseSchemaType>({
     query: useCallback(() => getWorkoutExerciseById(id), [id]),
   });
-  const exercise = data.length > 0 ? data[0] : null;
-
+  const realmExercise = data.length > 0 ? data[0] : null;
+  // It's possible that we delete the whole exercise so this access to .sets would be invalid
+  const exercise = useMemo(
+    () =>
+      realmExercise && realmExercise.isValid()
+        ? deserializeWorkoutExercise(realmExercise)
+        : null,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [timestamp]
+  );
   const renderControls = useCallback(() => {
     if (exerciseCategory === 'time') {
       return <EditSetsTime />;

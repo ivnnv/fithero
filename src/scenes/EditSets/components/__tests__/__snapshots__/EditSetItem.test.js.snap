@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditSetItem shows a trophy if set is maxSetId 1`] = `
+Snapshot Diff:
+- First value
++ Second value
+
+@@ --- --- @@
+-               "color": null,
++               "color": "yellow",
+@@ --- --- @@
+-               Object {
+-                 "opacity": 0,
+-               },
++               false,
+`;
+
+exports[`EditSetItem shows the set selected if is set is isSelected 1`] = `
+Snapshot Diff:
+- First value
++ Second value
+
+@@ --- --- @@
+-         false,
++         Object {
++           "backgroundColor": "#66809B",
++         },
+`;

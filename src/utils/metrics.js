@@ -2,10 +2,7 @@
 
 import * as RNLocalize from 'react-native-localize';
 
-import type {
-  WorkoutExerciseSchemaType,
-  WorkoutExerciseWeightRepsType,
-} from '../database/types';
+import type { WorkoutExerciseWeightRepsType } from '../database/types';
 import type { DefaultUnitSystemType } from '../redux/modules/settings';
 
 const oneKgToLb = 2.204622622;
@@ -20,7 +17,9 @@ export const getWeight = (
   defaultUnitSystem: DefaultUnitSystemType
 ) => {
   const unit =
-    exercise && exercise.isValid() && exercise.weight_unit
+    exercise &&
+    ((exercise.isValid && exercise.isValid()) || !exercise.isValid) &&
+    exercise.weight_unit
       ? exercise.weight_unit
       : defaultUnitSystem;
   if (unit !== 'metric') {
@@ -30,10 +29,12 @@ export const getWeight = (
 };
 
 export const getWeightUnit = (
-  exercise: ?WorkoutExerciseSchemaType,
+  exercise: ?WorkoutExerciseWeightRepsType,
   defaultUnitSystem: DefaultUnitSystemType
 ): DefaultUnitSystemType =>
-  exercise && exercise.isValid() && exercise.weight_unit
+  exercise &&
+  ((exercise.isValid && exercise.isValid()) || !exercise.isValid) &&
+  exercise.weight_unit
     ? exercise.weight_unit
     : defaultUnitSystem;
 

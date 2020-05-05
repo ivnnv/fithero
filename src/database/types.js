@@ -22,34 +22,32 @@ export type ExerciseCategoryType =
   | 'time'
   | 'time_distance';
 
-type AddWorkoutExerciseSchemaType = {
+type BaseWorkoutExerciseSchemaType = {
   id: string,
   date: Date,
   type: string,
-  weight_unit: 'metric' | 'imperial',
   category: ExerciseCategoryType,
-  sets: Array<WorkoutSetWeightRepsType>,
 };
 
-export type AddWorkoutExerciseWeightRepsType = AddWorkoutExerciseSchemaType & {
+export type AddWorkoutExerciseWeightRepsType = BaseWorkoutExerciseSchemaType & {
   sets: Array<WorkoutSetWeightRepsType>,
 };
 
 export type WorkoutExerciseWeightRepsType = RealmObject &
-  AddWorkoutExerciseSchemaType & {
+  BaseWorkoutExerciseSchemaType & {
+    weight_unit: 'metric' | 'imperial',
     sets: Array<WorkoutSetWeightRepsType>,
     sort: number,
   };
 
 export type WorkoutExerciseTimeType = RealmObject &
-  AddWorkoutExerciseSchemaType & {
+  BaseWorkoutExerciseSchemaType & {
     sets: Array<WorkoutSetTimeType>,
     sort: number,
   };
 
-export type WorkoutExerciseSchemaType =
-  | WorkoutExerciseWeightRepsType
-  | WorkoutExerciseTimeType;
+export type WorkoutExerciseSchemaType = WorkoutExerciseWeightRepsType &
+  WorkoutExerciseTimeType;
 
 export type WorkoutSetSchemaType = {
   id: string,
