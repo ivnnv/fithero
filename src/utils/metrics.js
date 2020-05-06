@@ -50,3 +50,30 @@ export const getDefaultUnitSystemByCountry = (): DefaultUnitSystemType => {
   }
   return 'metric';
 };
+
+type DurationInputStringType = {
+  hours: string,
+  minutes: string,
+  seconds: string,
+};
+
+export const durationInputStringToSeconds = ({
+  hours,
+  minutes,
+  seconds,
+}: DurationInputStringType) =>
+  parseInt(hours, 10) * 3600 +
+  parseInt(minutes, 10) * 60 +
+  parseInt(seconds, 10);
+
+export const secondsDurationToInputString = (secondsDuration: number) => {
+  const hours = Math.floor(secondsDuration / 3600);
+  const minutes = Math.floor((secondsDuration - hours * 3600) / 60);
+  const seconds = secondsDuration - hours * 3600 - minutes * 60;
+
+  return {
+    hours: hours.toString(),
+    minutes: minutes.toString(),
+    seconds: seconds.toString(),
+  };
+};
