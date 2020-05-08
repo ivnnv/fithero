@@ -7,18 +7,7 @@ import type { WorkoutExerciseWeightRepsType } from '../../../database/types';
 import EditSetsInputControls from '../components/EditSetsInputControls';
 import i18n from '../../../utils/i18n';
 import EditSetActionButtons from '../components/EditSetActionButtons';
-import {
-  extractSetIndexFromDatabase,
-  getExerciseSchemaId,
-  getSetSchemaId,
-} from '../../../database/utils';
-import {
-  addSet,
-  deleteSet,
-  updateSet,
-} from '../../../database/services/WorkoutSetService';
-import { addExercise } from '../../../database/services/WorkoutExerciseService';
-import { toDate } from '../../../utils/date';
+import { deleteSet } from '../../../database/services/WorkoutSetService';
 import {
   getWeight,
   getWeightUnit,
@@ -28,7 +17,7 @@ import {
 import type { DefaultUnitSystemType } from '../../../redux/modules/settings';
 import Card from '../../../components/Card';
 import { useSelector } from 'react-redux';
-import { getLastSet, getLastWeight } from '../utils';
+import { addSetFromInput, getLastSet, getLastWeight } from '../utils';
 import usePrevious from '../../../hooks/usePrevious';
 import useSelectedId from '../hooks/useSelectedId';
 import EditSetsWeightRepsList from './EditSetsWeightRepsList';
@@ -121,11 +110,14 @@ const EditSetsWeightReps = (props: Props) => {
   );
 
   const onAddSet = useCallback(() => {
-    let newExercise = null;
+    // If the user presses very fast it can try to create a duplicated primary key
+    if (isAddingExercise.current) {
+      return;
+    }
+    isAddingExercise.current = true;
 
     Keyboard.dismiss();
 
-    const unit = getWeightUnit(exercise, defaultUnitSystem);
     let newWeight = 0;
     if (weight !== '' && !isNaN(weight)) {
       newWeight =
@@ -134,63 +126,30 @@ const EditSetsWeightReps = (props: Props) => {
 
     const newReps = reps ? parseInt(reps, 10) : 0;
 
-    if (!exercise) {
-      const exerciseIdDb = getExerciseSchemaId(day, exerciseKey);
-      const date = toDate(day);
-      newExercise = {
-        id: exerciseIdDb,
-        sets: [
-          {
-            id: getSetSchemaId(day, exerciseKey, 1),
-            weight: newWeight,
-            reps: newReps,
-            date,
-            type: exerciseKey,
-          },
-        ],
-        date,
-        type: exerciseKey,
-        weight_unit: defaultUnitSystem,
-        category: 'weight_reps',
-      };
-      // If the user presses very fast it can try to create a duplicated primary key
-      if (isAddingExercise.current) {
-        return;
-      }
-      isAddingExercise.current = true;
-      addExercise(newExercise);
-    } else if (!selectedId) {
-      const lastId = exercise.sets[exercise.sets.length - 1].id;
-      const lastIndex = extractSetIndexFromDatabase(lastId);
-
-      addSet({
-        id: getSetSchemaId(day, exerciseKey, lastIndex + 1),
+    addSetFromInput({
+      day,
+      exerciseKey,
+      exercise,
+      category: 'weight_reps',
+      partialSet: {
         weight: newWeight,
         reps: newReps,
-        date: toDate(day),
-        type: exerciseKey,
-      });
-    } else if (selectedId) {
-      updateSet({
-        id: selectedId,
-        weight: newWeight,
-        reps: newReps,
-        date: toDate(day),
-        type: exerciseKey,
-      });
-    }
+      },
+      weight_unit: unit,
+      updateId: selectedId,
+    });
 
     if (selectedId) {
       setSelectedId('');
     }
   }, [
     day,
-    defaultUnitSystem,
     exercise,
     exerciseKey,
     reps,
     selectedId,
     setSelectedId,
+    unit,
     weight,
   ]);
 

@@ -8,12 +8,15 @@ import { fireEvent, render } from 'react-native-testing-library';
 import EditSetsWeightReps from '../index';
 import { toDate } from '../../../../utils/date';
 import {
+  addSet,
   deleteSet,
   getLastSetByType,
   getMaxSetByType,
+  updateSet,
 } from '../../../../database/services/WorkoutSetService';
 import { MockRealmArray } from '../../../../database/services/__tests__/helpers/databaseMocks';
 import { createStore } from 'redux';
+import { addExercise } from '../../../../database/services/WorkoutExerciseService';
 
 jest.mock('react-native/Libraries/Components/Keyboard/Keyboard');
 
@@ -26,7 +29,9 @@ jest.mock('../../../../database/services/WorkoutSetService', () => ({
   getMaxRepByType: jest.fn(),
 }));
 
-jest.mock('../../../../database/services/WorkoutExerciseService');
+jest.mock('../../../../database/services/WorkoutExerciseService', () => ({
+  addExercise: jest.fn(),
+}));
 
 jest.mock('../../../../hooks/useKeyboard');
 
@@ -38,17 +43,17 @@ describe('EditSetsWeightReps', () => {
   const day = '2018-05-01T00:00:00.000Z';
   const exerciseKey = 'bench-press';
   const exercise = {
-    id: '2018-05-01T00:00:00.000Z_bench-press',
+    id: '20180501_bench-press',
     sets: [
       {
-        id: '2018-05-01T00:00:00.000Z_bench-press_001',
+        id: '20180501_bench-press_001',
         reps: 8,
-        weight: 100,
+        weight: 80,
         date,
         type: 'bench-press',
       },
       {
-        id: '2018-05-01T00:00:00.000Z_bench-press_002',
+        id: '20180501_bench-press_002',
         reps: 6,
         weight: 90,
         date,
@@ -64,6 +69,10 @@ describe('EditSetsWeightReps', () => {
 
   const defaultWeight = 20;
   const defaultReps = 8;
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
   const _render = (props, defaultUnitSystem = 'metric') =>
     render(
@@ -215,18 +224,6 @@ describe('EditSetsWeightReps', () => {
       expect(getByTestId('deleteSetButton').props.disabled).toBe(false);
     });
 
-    it('adds a set and dismiss the keyboard', () => {
-      const { getByTestId } = _render();
-
-      expect(Keyboard.dismiss).not.toHaveBeenCalled();
-
-      fireEvent.press(getByTestId('addSetButton'));
-
-      expect(Keyboard.dismiss).toHaveBeenCalled();
-
-      // TODO test rest of logic inside here
-    });
-
     it('deletes a set and dismiss the keyboard', () => {
       const { getByTestId } = _render();
 
@@ -258,6 +255,87 @@ describe('EditSetsWeightReps', () => {
       expect(metricJSON()).toMatchDiffSnapshot(imperialJSON(), {
         contextLines: 0,
         stablePatchmarks: true,
+      });
+    });
+  });
+
+  describe('onAddSet', () => {
+    it('dismissed the keyboard when adding a set', () => {
+      const { getByTestId } = _render();
+
+      expect(Keyboard.dismiss).not.toHaveBeenCalled();
+
+      fireEvent.press(getByTestId('addSetButton'));
+
+      expect(Keyboard.dismiss).toHaveBeenCalled();
+    });
+
+    const _addSet = getByTestId => {
+      const weightInput = getByTestId('weightInput');
+      const repsInput = getByTestId('repsInput');
+
+      fireEvent.changeText(weightInput, '100');
+      fireEvent.changeText(repsInput, '6');
+
+      fireEvent.press(getByTestId('addSetButton'));
+    };
+
+    it('creates a new exercise with a new set if there is no exercise', () => {
+      const { getByTestId } = _render();
+      _addSet(getByTestId);
+      fireEvent.press(getByTestId('addSetButton'));
+
+      expect(addExercise).toHaveBeenCalledWith({
+        id: '20180501_bench-press',
+        date,
+        category: 'weight_reps',
+        sets: [
+          {
+            id: '20180501_bench-press_001',
+            date,
+            weight: 100,
+            reps: 6,
+            category: 'weight_reps',
+            type: 'bench-press',
+          },
+        ],
+        weight_unit: 'metric',
+        type: 'bench-press',
+      });
+    });
+
+    it('adds a set to an existing exercise', () => {
+      const { getByTestId } = _render({ exercise });
+      _addSet(getByTestId);
+      fireEvent.press(getByTestId('addSetButton'));
+
+      expect(addExercise).not.toHaveBeenCalled();
+      expect(addSet).toHaveBeenCalledWith({
+        id: '20180501_bench-press_003',
+        date,
+        weight: 100,
+        reps: 6,
+        category: 'weight_reps',
+        type: 'bench-press',
+      });
+    });
+
+    it('updates an existing set', async () => {
+      const { getByTestId } = _render({ exercise });
+      fireEvent.press(getByTestId('editSetItem-1'));
+      _addSet(getByTestId);
+
+      fireEvent.press(getByTestId('addSetButton'));
+
+      expect(addExercise).not.toHaveBeenCalled();
+      expect(addSet).not.toHaveBeenCalled();
+      expect(updateSet).toHaveBeenCalledWith({
+        id: exercise.sets[0].id,
+        date,
+        weight: 100,
+        reps: 6,
+        category: 'weight_reps',
+        type: 'bench-press',
       });
     });
   });
