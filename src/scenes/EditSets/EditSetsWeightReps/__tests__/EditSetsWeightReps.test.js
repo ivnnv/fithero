@@ -4,6 +4,7 @@ import React from 'react';
 import { Keyboard } from 'react-native';
 import { Provider } from 'react-redux';
 import { fireEvent, render } from 'react-native-testing-library';
+import { useRoute } from '@react-navigation/native';
 
 import EditSetsWeightReps from '../index';
 import { toDate } from '../../../../utils/date';
@@ -19,7 +20,6 @@ import { createStore } from 'redux';
 import { addExercise } from '../../../../database/services/WorkoutExerciseService';
 
 jest.mock('react-native/Libraries/Components/Keyboard/Keyboard');
-
 jest.mock('../../../../database/services/WorkoutSetService', () => ({
   addSet: jest.fn(),
   deleteSet: jest.fn(),
@@ -28,13 +28,10 @@ jest.mock('../../../../database/services/WorkoutSetService', () => ({
   getMaxSetByType: jest.fn(),
   getMaxRepByType: jest.fn(),
 }));
-
 jest.mock('../../../../database/services/WorkoutExerciseService', () => ({
   addExercise: jest.fn(),
 }));
-
 jest.mock('../../../../hooks/useKeyboard');
-
 jest.mock('../../../../hooks/useMaxSetHook');
 
 const date = toDate('2018-05-01T00:00:00.000Z');
@@ -74,23 +71,28 @@ describe('EditSetsWeightReps', () => {
     jest.clearAllMocks();
   });
 
-  const _render = (props, defaultUnitSystem = 'metric') =>
-    render(
+  const _render = (props, defaultUnitSystem = 'metric') => {
+    useRoute.mockReturnValue({
+      params: {
+        day,
+        exerciseKey,
+      },
+    });
+    return render(
       <Provider
         store={createStore(() => ({
           settings: { defaultUnitSystem },
         }))}
       >
         <EditSetsWeightReps
-          day={day}
-          exerciseKey={exerciseKey}
-          exercise={null}
           selectedPage={0}
+          exercise={null}
           // $FlowIgnore
           {...props}
         />
       </Provider>
     );
+  };
 
   describe('EditSetsInputControls', () => {
     it('has correct default values if there is no exercise', async () => {

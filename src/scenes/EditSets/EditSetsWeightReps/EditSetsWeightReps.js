@@ -2,8 +2,12 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Keyboard, StyleSheet, View } from 'react-native';
+import { useRoute } from '@react-navigation/native';
 
-import type { WorkoutExerciseWeightRepsType } from '../../../database/types';
+import type {
+  WorkoutExerciseWeightRepsType,
+  WorkoutSetWeightRepsType,
+} from '../../../database/types';
 import EditSetsInputControls from '../components/EditSetsInputControls';
 import i18n from '../../../utils/i18n';
 import EditSetActionButtons from '../components/EditSetActionButtons';
@@ -21,16 +25,17 @@ import { addSetFromInput, getLastSet, getLastWeight } from '../utils';
 import usePrevious from '../../../hooks/usePrevious';
 import useSelectedId from '../hooks/useSelectedId';
 import EditSetsWeightRepsList from './EditSetsWeightRepsList';
+import type { EditSetsScreenRouteType } from '../EditSetsScreen';
 
 type Props = {
-  day: string,
-  exerciseKey: string,
   exercise: ?WorkoutExerciseWeightRepsType,
   selectedPage?: number,
 };
 
 const EditSetsWeightReps = (props: Props) => {
-  const { day, exercise, exerciseKey, selectedPage } = props;
+  const { exercise, selectedPage } = props;
+  const route: EditSetsScreenRouteType = useRoute();
+  const { day, exerciseKey } = route.params;
   const [selectedId, setSelectedId] = useSelectedId(selectedPage);
   const defaultUnitSystem: DefaultUnitSystemType = useSelector(
     state => state.settings.defaultUnitSystem
@@ -40,7 +45,10 @@ const EditSetsWeightReps = (props: Props) => {
   );
   const isAddingExercise = useRef(false);
   const unit = getWeightUnit(exercise, defaultUnitSystem);
-  const lastSet = getLastSet(exercise, exerciseKey);
+  const lastSet: ?WorkoutSetWeightRepsType = getLastSet<WorkoutExerciseWeightRepsType>(
+    exercise,
+    exerciseKey
+  );
   const lastWeight = getLastWeight(exercise, lastSet, unit);
   const lastReps = lastSet ? lastSet.reps.toString() : '8';
 
@@ -163,7 +171,10 @@ const EditSetsWeightReps = (props: Props) => {
   useEffect(() => {
     if (previousDefaultUnitSystem !== defaultUnitSystem && !exercise) {
       const unit = getWeightUnit(exercise, defaultUnitSystem);
-      const lastSet = getLastSet(exercise, exerciseKey);
+      const lastSet: ?WorkoutSetWeightRepsType = getLastSet<WorkoutSetWeightRepsType>(
+        exercise,
+        exerciseKey
+      );
       const lastWeight = getLastWeight(exercise, lastSet, unit);
       setWeight(lastWeight);
     }

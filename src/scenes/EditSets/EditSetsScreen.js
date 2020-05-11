@@ -20,7 +20,7 @@ import type {
 import { getExerciseName } from '../../utils/exercises';
 import EditSetsTime from './EditSetsTime';
 
-type RouteType = {
+export type EditSetsScreenRouteType = {
   params: {
     day: string,
     exerciseKey: string,
@@ -35,7 +35,7 @@ type Props = {
 };
 
 const EditSetsScreen = (props: Props) => {
-  const route: RouteType = useRoute();
+  const route: EditSetsScreenRouteType = useRoute();
   const {
     day,
     exerciseKey,
@@ -61,18 +61,16 @@ const EditSetsScreen = (props: Props) => {
   );
   const renderControls = useCallback(() => {
     if (exerciseCategory === 'time') {
-      return <EditSetsTime />;
+      return <EditSetsTime exercise={exercise} selectedPage={selectedPage} />;
     }
     return (
       <EditSetsWeightReps
         testID="edit-sets-with-controls"
-        day={day}
-        exerciseKey={exerciseKey}
         exercise={exercise}
         selectedPage={selectedPage}
       />
     );
-  }, [day, exercise, exerciseCategory, exerciseKey, selectedPage]);
+  }, [exercise, exerciseCategory, selectedPage]);
 
   return (
     <Screen style={styles.container}>

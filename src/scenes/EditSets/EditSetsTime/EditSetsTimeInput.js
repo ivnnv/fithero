@@ -1,14 +1,22 @@
 /* @flow */
 
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
+
 import i18n from '../../../utils/i18n';
 import TimeInput from '../components/TimeInput';
 
-const EditSetsTimeInput = () => {
-  const [hours, setHours] = useState('0');
-  const [minutes, setMinutes] = useState('0');
-  const [seconds, setSeconds] = useState('0');
+type Props = {
+  hours: string,
+  setHours: (time: string) => void,
+  minutes: string,
+  setMinutes: (time: string) => void,
+  seconds: string,
+  setSeconds: (time: string) => void,
+};
+
+const EditSetsTimeInput = (props: Props) => {
+  const { hours, setHours, minutes, setMinutes, seconds, setSeconds } = props;
 
   return (
     <>

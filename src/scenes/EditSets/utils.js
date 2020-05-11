@@ -9,10 +9,16 @@ import {
 } from '../../database/services/WorkoutSetService';
 import type {
   ExerciseCategoryType,
+  WorkoutExerciseTimeType,
   WorkoutExerciseWeightRepsType,
+  WorkoutSetTimeType,
   WorkoutSetWeightRepsType,
 } from '../../database/types';
-import { getWeight, toTwoDecimals } from '../../utils/metrics';
+import {
+  getWeight,
+  secondsDurationToInputString,
+  toTwoDecimals,
+} from '../../utils/metrics';
 import type { DefaultUnitSystemType } from '../../redux/modules/settings';
 import {
   extractSetIndexFromDatabase,
@@ -22,21 +28,20 @@ import {
 import { toDate } from '../../utils/date';
 import { addExercise } from '../../database/services/WorkoutExerciseService';
 
-export const getLastSet = (
-  exercise: ?WorkoutExerciseWeightRepsType,
-  exerciseKey: string
-) => {
+export function getLastSet<T>(exercise: ?T, exerciseKey: string) {
+  // flowlint sketchy-null-mixed:off
   if (exercise) {
+    // $FlowFixMe
     return exercise.sets[exercise.sets.length - 1];
   } else {
-    const sets = getLastSetByType(exerciseKey || exercise?.type);
+    const sets = getLastSetByType(exerciseKey);
     if (sets.length > 0) {
       return sets[0];
     }
 
     return null;
   }
-};
+}
 
 export const getLastWeight = (
   exercise: ?WorkoutExerciseWeightRepsType,
@@ -52,16 +57,35 @@ export const getLastWeight = (
   return lastWeight.toString();
 };
 
+export const getLastDuration = (
+  exercise: ?WorkoutExerciseTimeType,
+  exerciseKey: string
+) => {
+  const lastSet: ?WorkoutSetTimeType = getLastSet<WorkoutExerciseTimeType>(
+    exercise,
+    exerciseKey
+  );
+  const { hours = '0', minutes = '0', seconds = '0' } = lastSet
+    ? secondsDurationToInputString(lastSet.time)
+    : {};
+
+  return { hours, minutes, seconds };
+};
+
 type AddSetFromInputType = {
   day: string,
   exerciseKey: string,
-  exercise: ?WorkoutExerciseWeightRepsType,
+  exercise: ?WorkoutExerciseWeightRepsType | WorkoutExerciseTimeType,
   category: ExerciseCategoryType,
-  partialSet: {
-    weight: number,
-    reps: number,
-  },
-  weight_unit: ?DefaultUnitSystemType,
+  partialSet:
+    | {
+        weight: number,
+        reps: number,
+      }
+    | {
+        time: number,
+      },
+  weight_unit?: DefaultUnitSystemType,
   updateId?: string,
 };
 

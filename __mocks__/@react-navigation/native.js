@@ -15,3 +15,6 @@ export const useNavigation = () => ({
 
 // $FlowFixMe
 export const useFocusEffect = jest.fn();
+
+// $FlowFixMe
+export const useRoute = jest.fn();
