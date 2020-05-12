@@ -8,7 +8,6 @@ import React, {
   useMemo,
 } from 'react';
 import { Keyboard, StyleSheet, View } from 'react-native';
-import { Card } from 'react-native-paper';
 import EditSetActionButtons from '../components/EditSetActionButtons';
 import EditSetsTimeInput from './EditSetsTimeInput';
 import {
@@ -22,6 +21,7 @@ import { useRoute } from '@react-navigation/native';
 import type { EditSetsScreenRouteType } from '../EditSetsScreen';
 import EditSetsTimeList from './EditSetsTimeList';
 import { deleteSet } from '../../../database/services/WorkoutSetService';
+import Card from '../../../components/Card';
 
 type Props = {
   exercise: ?WorkoutExerciseTimeType,

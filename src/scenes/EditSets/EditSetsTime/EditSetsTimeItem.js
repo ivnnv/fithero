@@ -32,9 +32,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18,
     flex: 0.5,
+    textAlign: 'right', // Android needs it here
   },
   innerText: {
-    textAlign: 'right',
+    textAlign: 'right', // iOS needs it here
   },
   space: {
     flex: 0.5,
