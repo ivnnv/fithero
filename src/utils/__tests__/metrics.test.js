@@ -2,6 +2,7 @@
 
 import {
   durationInputStringToSeconds,
+  formatDuration,
   secondsDurationToInputString,
 } from '../metrics';
 
@@ -58,5 +59,13 @@ describe('metrics', () => {
         seconds: '0',
       })
     ).toEqual(0);
+  });
+
+  test('formatDuration', () => {
+    expect(formatDuration(45)).toEqual('45');
+    expect(formatDuration(110)).toEqual('1:50');
+    expect(formatDuration(605)).toEqual('10:05');
+    expect(formatDuration(4205)).toEqual('1:10:05');
+    expect(formatDuration(37800)).toEqual('10:30:00');
   });
 });

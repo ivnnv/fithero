@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditSetsTimeItem compares set with placeholder for only seconds 1`] = `
+Snapshot Diff:
+- First value
++ Second value
+
+@@ --- --- @@
+-       0:
++       
+@@ --- --- @@
+-       45
++       1:50
+`;

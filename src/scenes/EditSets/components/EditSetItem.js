@@ -11,7 +11,7 @@ import type { ThemeType } from '../../../utils/theme/withTheme';
 
 type Props = {|
   isSelected: boolean,
-  trophyColor: ?string,
+  trophyColor?: ?string,
   color: ?string,
   onPressItem: (setId: string) => void,
   index: number,

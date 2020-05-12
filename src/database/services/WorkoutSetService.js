@@ -37,12 +37,11 @@ export const addSet = (set: WorkoutSetSchemaType) => {
 
 export const updateSet = (updatedSet: WorkoutSetWeightRepsType) => {
   realm.write(() => {
-    const set = realm.objectForPrimaryKey(
-      WORKOUT_SET_SCHEMA_NAME,
-      updatedSet.id
-    );
-    set.weight = updatedSet.weight;
-    set.reps = updatedSet.reps;
+    const { id, ...restUpdateSet } = updatedSet;
+    const set = realm.objectForPrimaryKey(WORKOUT_SET_SCHEMA_NAME, id);
+    Object.keys(restUpdateSet).forEach(k => {
+      set[k] = restUpdateSet[k];
+    });
   });
 };
 

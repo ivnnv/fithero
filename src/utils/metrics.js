@@ -77,3 +77,23 @@ export const secondsDurationToInputString = (secondsDuration: number) => {
     seconds: seconds.toString(),
   };
 };
+
+const formatSingleDuration = (duration: string) =>
+  parseInt(duration) > 9 ? duration : `0${duration}`;
+
+export const formatDuration = (secondsDuration: number) => {
+  const { hours, minutes, seconds } = secondsDurationToInputString(
+    secondsDuration
+  );
+
+  const formatMinutes = formatSingleDuration(minutes);
+  const formatSeconds = formatSingleDuration(seconds);
+
+  if (hours !== '0') {
+    return `${hours}:${formatMinutes}:${formatSeconds}`;
+  } else if (minutes !== '0') {
+    return `${minutes}:${formatSeconds}`;
+  }
+
+  return formatSeconds;
+};
