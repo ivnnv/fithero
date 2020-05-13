@@ -13,13 +13,13 @@ import {
   MockRealmArray,
   RealmArray,
 } from '../../database/services/__tests__/helpers/databaseMocks';
-import { getMaxSetByType } from '../../database/services/WorkoutSetService';
+import { getMaxWeightByType } from '../../database/services/WorkoutSetService';
 import theme from '../../utils/theme';
 import type { DefaultUnitSystemType } from '../../redux/modules/settings';
 import { createStore } from 'redux';
 
 jest.mock('../../database/services/WorkoutSetService', () => ({
-  getMaxSetByType: jest.fn(() => new MockRealmArray()),
+  getMaxWeightByType: jest.fn(() => new MockRealmArray()),
   getMaxRepByType: jest.fn(() => new MockRealmArray()),
 }));
 
@@ -67,14 +67,14 @@ describe('WorkoutItem', () => {
 
   it('renders in special color if the set is your max set', () => {
     // $FlowFixMe
-    getMaxSetByType.mockImplementation(
+    getMaxWeightByType.mockImplementation(
       () => new RealmArray({ ...mockMultipleSets[0] })
     );
     const WorkoutItemWithMax = require('../Workouts/WorkoutItem').default;
     const { toJSON: maxJSON } = _getWorkout(WorkoutItemWithMax);
 
     // $FlowFixMe
-    getMaxSetByType.mockImplementation(() => new RealmArray());
+    getMaxWeightByType.mockImplementation(() => new RealmArray());
     const WorkoutItemWithoutMax = require('../Workouts/WorkoutItem').default;
     const { toJSON: noMaxJSON } = _getWorkout(WorkoutItemWithoutMax);
 

@@ -12,7 +12,7 @@ import { getFirstAndLastWeekday, getToday } from '../../utils/date';
 import { WORKOUT_SET_SCHEMA_NAME } from '../schemas/WorkoutSetSchema';
 import { WORKOUT_EXERCISE_SCHEMA_NAME } from '../schemas/WorkoutExerciseSchema';
 
-export const getMaxSetByType = (type: string) =>
+export const getMaxWeightByType = (type: string) =>
   realm
     .objects(WORKOUT_SET_SCHEMA_NAME)
     .filtered('type = $0', type)
@@ -23,6 +23,12 @@ export const getMaxRepByType = (type: string) =>
     .objects(WORKOUT_SET_SCHEMA_NAME)
     .filtered('type = $0', type)
     .sorted([['reps', true], ['weight', true], 'date', 'id']);
+
+export const getMaxTimeByType = (type: string) =>
+  realm
+    .objects(WORKOUT_SET_SCHEMA_NAME)
+    .filtered('type = $0', type)
+    .sorted([['time', true], 'date', 'id']);
 
 export const addSet = (set: WorkoutSetSchemaType) => {
   realm.write(() => {

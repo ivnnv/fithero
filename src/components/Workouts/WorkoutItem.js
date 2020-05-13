@@ -24,7 +24,7 @@ import { useCallback } from 'react';
 import useMaxSetHook from '../../hooks/useMaxSetHook';
 import {
   getMaxRepByType,
-  getMaxSetByType,
+  getMaxWeightByType,
 } from '../../database/services/WorkoutSetService';
 import { REALM_DEFAULT_DEBOUNCE_VALUE } from '../../database/constants';
 import Card from '../Card';
@@ -46,7 +46,7 @@ const WorkoutItem = (props: Props) => {
 
   const maxSet: ?WorkoutSetSchemaType = useMaxSetHook(
     exercise.type,
-    getMaxSetByType,
+    getMaxWeightByType,
     REALM_DEFAULT_DEBOUNCE_VALUE
   );
 

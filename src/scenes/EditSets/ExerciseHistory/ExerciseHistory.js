@@ -19,7 +19,7 @@ import type {
 import ExerciseHistoryItem from './ExerciseHistoryItem';
 import {
   getMaxRepByType,
-  getMaxSetByType,
+  getMaxWeightByType,
 } from '../../../database/services/WorkoutSetService';
 import type { DefaultUnitSystemType } from '../../../redux/modules/settings';
 import { dateToString, getToday } from '../../../utils/date';
@@ -64,7 +64,7 @@ const ExerciseHistory = () => {
 
   const maxSet: ?WorkoutSetSchemaType = useMaxSetHook(
     type,
-    getMaxSetByType,
+    getMaxWeightByType,
     debounceTime
   );
   const maxRep: ?WorkoutSetSchemaType = useMaxSetHook(

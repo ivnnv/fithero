@@ -12,7 +12,7 @@ import {
   addSet,
   deleteSet,
   getLastSetByType,
-  getMaxSetByType,
+  getMaxWeightByType,
   updateSet,
 } from '../../../../database/services/WorkoutSetService';
 import { MockRealmArray } from '../../../../database/services/__tests__/helpers/databaseMocks';
@@ -25,7 +25,7 @@ jest.mock('../../../../database/services/WorkoutSetService', () => ({
   deleteSet: jest.fn(),
   getLastSetByType: jest.fn(() => []),
   updateSet: jest.fn(),
-  getMaxSetByType: jest.fn(),
+  getMaxWeightByType: jest.fn(),
   getMaxRepByType: jest.fn(),
 }));
 jest.mock('../../../../database/services/WorkoutExerciseService', () => ({
@@ -240,7 +240,7 @@ describe('EditSetsWeightReps', () => {
 
   describe('Weight units', () => {
     // $FlowFixMe
-    getMaxSetByType.mockImplementation(
+    getMaxWeightByType.mockImplementation(
       () => new MockRealmArray({ ...exercise.sets[0] })
     );
 

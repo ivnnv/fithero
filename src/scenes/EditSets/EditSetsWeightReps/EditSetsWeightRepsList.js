@@ -10,7 +10,7 @@ import EditSetItem from '../components/EditSetItem';
 import useMaxSetHook from '../../../hooks/useMaxSetHook';
 import {
   getMaxRepByType,
-  getMaxSetByType,
+  getMaxWeightByType,
 } from '../../../database/services/WorkoutSetService';
 import { REALM_DEFAULT_DEBOUNCE_VALUE } from '../../../database/constants';
 import type { DefaultUnitSystemType } from '../../../redux/modules/settings';
@@ -41,7 +41,7 @@ const EditSetsWeightRepsList = (props: Props) => {
 
   const maxSet: ?WorkoutSetSchemaType = useMaxSetHook(
     type,
-    getMaxSetByType,
+    getMaxWeightByType,
     REALM_DEFAULT_DEBOUNCE_VALUE
   );
   const maxRep: ?WorkoutSetSchemaType = useMaxSetHook(
