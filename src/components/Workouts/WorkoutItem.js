@@ -3,34 +3,26 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
-import { useSelector } from 'react-redux';
 
 import { getExerciseName } from '../../utils/exercises';
 import type {
   ExerciseCategoryType,
   ExerciseSchemaType,
-  WorkoutExerciseWeightRepsType,
-  WorkoutSetSchemaType,
+  WorkoutExerciseSchemaType,
 } from '../../database/types';
 import { extractExerciseKeyFromDatabase } from '../../database/utils';
-import type { DefaultUnitSystemType } from '../../redux/modules/settings';
-import SetItem from '../WorkoutWeightRepsSetItem';
 import useRealmResultsHook from '../../hooks/useRealmResultsHook';
 import {
   getExerciseById,
   isCustomExercise,
 } from '../../database/services/ExerciseService';
 import { useCallback } from 'react';
-import useMaxSetHook from '../../hooks/useMaxSetHook';
-import {
-  getMaxRepByType,
-  getMaxWeightByType,
-} from '../../database/services/WorkoutSetService';
-import { REALM_DEFAULT_DEBOUNCE_VALUE } from '../../database/constants';
 import Card from '../Card';
+import WorkoutItemWeightReps from './WorkoutItemWeightReps';
+import WorkoutItemTime from './WorkoutItemTime';
 
 type Props = {|
-  exercise: WorkoutExerciseWeightRepsType,
+  exercise: WorkoutExerciseSchemaType,
   onPressItem: (
     exerciseKey: string,
     customExerciseName: ?string,
@@ -40,24 +32,6 @@ type Props = {|
 
 const WorkoutItem = (props: Props) => {
   const { exercise, onPressItem } = props;
-  const defaultUnitSystem: DefaultUnitSystemType = useSelector(
-    state => state.settings.defaultUnitSystem
-  );
-
-  const maxSet: ?WorkoutSetSchemaType = useMaxSetHook(
-    exercise.type,
-    getMaxWeightByType,
-    REALM_DEFAULT_DEBOUNCE_VALUE
-  );
-
-  const maxRep: ?WorkoutSetSchemaType = useMaxSetHook(
-    exercise.type,
-    getMaxRepByType,
-    REALM_DEFAULT_DEBOUNCE_VALUE
-  );
-
-  const maxSetId = maxSet ? maxSet.id : null;
-  const maxRepId = maxRep ? maxRep.id : null;
 
   const { data: customExercises } = useRealmResultsHook<ExerciseSchemaType>({
     query: useCallback(() => {
@@ -70,22 +44,6 @@ const WorkoutItem = (props: Props) => {
   const customExerciseName =
     customExercises.length > 0 ? customExercises[0].name : '';
 
-  const _renderSet = useCallback(
-    (set: WorkoutSetSchemaType, index: number) => {
-      return (
-        <SetItem
-          key={set.id}
-          set={set}
-          maxSetId={maxSetId}
-          maxRepId={maxRepId}
-          index={index}
-          unit={exercise.weight_unit || defaultUnitSystem}
-        />
-      );
-    },
-    [defaultUnitSystem, exercise.weight_unit, maxRepId, maxSetId]
-  );
-
   const onPress = useCallback(() => {
     onPressItem(
       extractExerciseKeyFromDatabase(exercise.id),
@@ -93,6 +51,13 @@ const WorkoutItem = (props: Props) => {
       exercise.category
     );
   }, [customExerciseName, exercise.category, exercise.id, onPressItem]);
+
+  const renderItem = useCallback(() => {
+    if (exercise.category === 'time') {
+      return <WorkoutItemTime exercise={exercise} />;
+    }
+    return <WorkoutItemWeightReps exercise={exercise} />;
+  }, [exercise]);
 
   return (
     <Card style={styles.card} onPress={onPress}>
@@ -104,9 +69,7 @@ const WorkoutItem = (props: Props) => {
           )}
         </Text>
         {exercise.sets.length > 0 && (
-          <View style={styles.setsContainer}>
-            {exercise.sets.map((set, index) => _renderSet(set, index))}
-          </View>
+          <View style={styles.setsContainer}>{renderItem()}</View>
         )}
       </View>
     </Card>

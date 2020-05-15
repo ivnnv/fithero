@@ -2,14 +2,12 @@
 
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text } from 'react-native-paper';
+import { Text, useTheme } from 'react-native-paper';
 
 import i18n from '../utils/i18n';
 import { toLb, toTwoDecimals } from '../utils/metrics';
 import type { WorkoutSetWeightRepsType } from '../database/types';
 import type { DefaultUnitSystemType } from '../redux/modules/settings';
-import type { ThemeType } from '../utils/theme/withTheme';
-import withTheme from '../utils/theme/withTheme';
 
 type Props = {
   set: WorkoutSetWeightRepsType,
@@ -17,12 +15,11 @@ type Props = {
   maxRepId: ?string,
   index: number,
   unit: DefaultUnitSystemType,
-  theme: ThemeType,
 };
 
 const WorkoutWeightRepsSetItem = (props: Props) => {
   const { set, maxSetId, maxRepId, index, unit } = props;
-  const { colors } = props.theme;
+  const { colors } = useTheme();
 
   const isMaxSet = maxSetId === set.id;
   const isMaxRep = maxRepId === set.id;
@@ -33,16 +30,16 @@ const WorkoutWeightRepsSetItem = (props: Props) => {
     : colors.text;
 
   return (
-    <View style={styles.setRow}>
-      <Text style={[styles.setIndex, { color }]}>{`${index + 1}.`}</Text>
-      <Text style={[styles.setWeight, { color }]}>
+    <View style={styles.row}>
+      <Text style={[styles.index, { color }]}>{`${index + 1}.`}</Text>
+      <Text style={[styles.weight, { color }]}>
         {unit === 'metric'
           ? `${i18n.t('kg.value', {
               count: toTwoDecimals(set.weight),
             })}`
           : `${toTwoDecimals(toLb(set.weight))} ${i18n.t('lb')}`}
       </Text>
-      <Text style={[styles.setReps, { color }]}>{`${i18n.t('reps.value', {
+      <Text style={[styles.reps, { color }]}>{`${i18n.t('reps.value', {
         count: set.reps,
       })}`}</Text>
     </View>
@@ -50,23 +47,23 @@ const WorkoutWeightRepsSetItem = (props: Props) => {
 };
 
 const styles = StyleSheet.create({
-  setRow: {
+  row: {
     flexDirection: 'row',
     paddingBottom: 4,
   },
-  setIndex: {
+  index: {
     flex: 0.08,
     paddingRight: 8,
   },
-  setWeight: {
+  weight: {
     flex: 0.25,
     textAlign: 'right',
     paddingRight: 8,
   },
-  setReps: {
+  reps: {
     flex: 0.25,
     textAlign: 'right',
   },
 });
 
-export default withTheme(WorkoutWeightRepsSetItem);
+export default WorkoutWeightRepsSetItem;
