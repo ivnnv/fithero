@@ -3,15 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 
-import type { DefaultUnitSystemType } from '../../../redux/modules/settings';
 import ExerciseHistory from './ExerciseHistory';
 
-type Props = {
-  type: 'string',
-  unit: DefaultUnitSystemType,
-};
-
-const ExerciseHistoryAndroid = (props: Props) => {
+const ExerciseHistoryAndroid = () => {
   const [showHistory, setShowHistory] = useState(false);
   const isFocused = useIsFocused();
 
@@ -24,7 +18,7 @@ const ExerciseHistoryAndroid = (props: Props) => {
 
   if (!showHistory) return null;
 
-  return <ExerciseHistory {...props} />;
+  return <ExerciseHistory />;
 };
 
 export default ExerciseHistoryAndroid;

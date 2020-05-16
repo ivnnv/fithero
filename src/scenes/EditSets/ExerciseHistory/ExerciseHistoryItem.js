@@ -6,33 +6,22 @@ import { Text } from 'react-native-paper';
 
 import { getDatePrettyFormat } from '../../../utils/date';
 import type { WorkoutExerciseSchemaType } from '../../../database/types';
-import SetItem from '../../../components/WorkoutWeightRepsSetItem';
 
 type Props = {|
   exercise: WorkoutExerciseSchemaType,
-  maxSetId: ?string,
-  maxRepId: ?string,
   todayString: string,
+  renderSets: () => React.Node,
 |};
 
 const ExerciseHistoryItem = (props: Props) => {
-  const { exercise, maxSetId, maxRepId, todayString } = props;
+  const { exercise, todayString, renderSets } = props;
 
   return (
     <View style={styles.container}>
       <Text style={styles.date}>
         {getDatePrettyFormat(exercise.date, todayString)}
       </Text>
-      {exercise.sets.map((set, index) => (
-        <SetItem
-          key={set.id}
-          set={set}
-          index={index}
-          unit={exercise.weight_unit}
-          maxSetId={maxSetId}
-          maxRepId={maxRepId}
-        />
-      ))}
+      {renderSets()}
     </View>
   );
 };
@@ -50,8 +39,7 @@ export default React.memo<Props>(
   ExerciseHistoryItem,
   (prevProps, nextProps) => {
     if (
-      prevProps.maxSetId !== nextProps.maxSetId ||
-      prevProps.maxRepId !== nextProps.maxRepId ||
+      prevProps.renderSets !== nextProps.renderSets ||
       prevProps.todayString !== nextProps.todayString
     ) {
       return false;
