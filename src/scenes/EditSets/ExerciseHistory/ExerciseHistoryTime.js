@@ -6,7 +6,7 @@ import { useRoute } from '@react-navigation/native';
 
 import type {
   ExerciseCategoryType,
-  WorkoutSetSchemaType,
+  WorkoutSetTimeType,
 } from '../../../database/types';
 import ExerciseHistoryItem from './ExerciseHistoryItem';
 import { getMaxTimeByType } from '../../../database/services/WorkoutSetService';
@@ -16,6 +16,11 @@ import useMaxSetHook from '../../../hooks/useMaxSetHook';
 import { REALM_DEFAULT_DEBOUNCE_VALUE } from '../../../database/constants';
 import ExerciseHistoryList from './ExerciseHistoryList';
 import WorkoutTimeSetItem from '../../../components/WorkoutTimeSetItem';
+import PersonalRecords from './PersonalRecords';
+import PersonalRecordItem from './PersonalRecordItem';
+import type { ThemeType } from '../../../utils/theme/withTheme';
+import { useTheme } from 'react-native-paper';
+import SetTimeFormat from '../../../components/SetTimeFormat';
 
 type RouteType = {
   params: {
@@ -33,8 +38,10 @@ const debounceTime =
 const ExerciseHistoryTime = () => {
   const route: RouteType = useRoute();
   const type = route.params.exerciseKey;
+  const { colors }: ThemeType = useTheme();
 
-  const maxSet: ?WorkoutSetSchemaType = useMaxSetHook(
+  // $FlowFixMe type it better
+  const maxSet: ?WorkoutSetTimeType = useMaxSetHook(
     type,
     getMaxTimeByType,
     debounceTime
@@ -69,9 +76,31 @@ const ExerciseHistoryTime = () => {
     [maxSetId, todayString]
   );
 
+  const renderHeader = useCallback(() => {
+    // $FlowFixMe type it better
+    if (maxSet && maxSet.isValid()) {
+      return (
+        <PersonalRecords>
+          <PersonalRecordItem date={maxSet.date} trophyColor={colors.trophy}>
+            <SetTimeFormat
+              time={maxSet.time}
+              color={colors.text}
+              textAlign="left"
+            />
+          </PersonalRecordItem>
+        </PersonalRecords>
+      );
+    }
+
+    return null;
+  }, [colors.text, colors.trophy, maxSet]);
+
   return (
     // TODO implement ListHeaderComponent with PersonalRecords
-    <ExerciseHistoryList renderItem={renderItem} ListHeaderComponent={null} />
+    <ExerciseHistoryList
+      renderItem={renderItem}
+      ListHeaderComponent={renderHeader}
+    />
   );
 };
 

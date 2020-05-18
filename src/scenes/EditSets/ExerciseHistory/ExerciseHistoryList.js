@@ -27,6 +27,7 @@ type RouteType = {
 };
 
 type Props = {
+  // eslint-disable-next-line flowtype/no-weak-types
   ListHeaderComponent: ?(React.ComponentType<any> | React.Element<any>),
   renderItem: (exercise: WorkoutExerciseSchemaType) => React.Node,
 };

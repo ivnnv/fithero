@@ -8,7 +8,7 @@ import { useRoute } from '@react-navigation/native';
 import { getWorkoutExerciseById } from '../../../database/services/WorkoutExerciseService';
 import type {
   ExerciseCategoryType,
-  WorkoutSetSchemaType,
+  WorkoutSetWeightRepsType,
 } from '../../../database/types';
 import ExerciseHistoryItem from './ExerciseHistoryItem';
 import {
@@ -26,6 +26,10 @@ import useMaxSetHook from '../../../hooks/useMaxSetHook';
 import { REALM_DEFAULT_DEBOUNCE_VALUE } from '../../../database/constants';
 import ExerciseHistoryList from './ExerciseHistoryList';
 import WorkoutWeightRepsSetItem from '../../../components/WorkoutWeightRepsSetItem';
+import PersonalRecordItem from './PersonalRecordItem';
+import type { ThemeType } from '../../../utils/theme/withTheme';
+import { useTheme } from 'react-native-paper';
+import PersonalRecordWeightRepsItem from './PersonalRecordWeightRepsItem';
 
 type RouteType = {
   params: {
@@ -46,16 +50,19 @@ const ExerciseHistoryWeightReps = () => {
   const defaultUnitSystem: DefaultUnitSystemType = useSelector(
     state => state.settings.defaultUnitSystem
   );
+  const { colors }: ThemeType = useTheme();
 
   const [maxSetUnit, setMaxSetUnit] = useState(defaultUnitSystem);
   const [maxRepUnit, setMaxRepUnit] = useState(defaultUnitSystem);
 
-  const maxSet: ?WorkoutSetSchemaType = useMaxSetHook(
+  // $FlowFixMe type it better
+  const maxSet: ?WorkoutSetWeightRepsType = useMaxSetHook(
     type,
     getMaxWeightByType,
     debounceTime
   );
-  const maxRep: ?WorkoutSetSchemaType = useMaxSetHook(
+  // $FlowFixMe type it better
+  const maxRep: ?WorkoutSetWeightRepsType = useMaxSetHook(
     type,
     getMaxRepByType,
     debounceTime
@@ -116,20 +123,32 @@ const ExerciseHistoryWeightReps = () => {
     [maxRepId, maxSetId, todayString]
   );
 
+  const renderHeader = useCallback(() => {
+    // $FlowFixMe type it better
+    if (maxSet && maxSet.isValid() && maxRep && maxRep.isValid()) {
+      return (
+        <PersonalRecords>
+          <PersonalRecordItem date={maxSet.date} trophyColor={colors.trophy}>
+            <PersonalRecordWeightRepsItem set={maxSet} unit={maxSetUnit} />
+          </PersonalRecordItem>
+          <PersonalRecordItem
+            date={maxRep.date}
+            trophyColor={colors.trophyReps}
+            last
+          >
+            <PersonalRecordWeightRepsItem set={maxRep} unit={maxRepUnit} />
+          </PersonalRecordItem>
+        </PersonalRecords>
+      );
+    }
+
+    return null;
+  }, [colors, maxRep, maxRepUnit, maxSet, maxSetUnit]);
+
   return (
     <ExerciseHistoryList
       renderItem={renderItem}
-      ListHeaderComponent={
-        // $FlowFixMe type it better
-        maxSet && maxSet.isValid() && maxRep && maxRep.isValid() ? (
-          <PersonalRecords
-            maxSet={maxSet}
-            maxRep={maxRep}
-            maxSetUnit={maxSetUnit}
-            maxRepUnit={maxRepUnit}
-          />
-        ) : null
-      }
+      ListHeaderComponent={renderHeader}
     />
   );
 };
